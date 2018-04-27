@@ -38,7 +38,7 @@ class Gallery(pattern.Closable, pattern.Logger):
       os.makedirs(self._CACHE_PATH)
 
   def start(self):
-    self._refresh()
+    pass
 
   def close(self):
     if self._timer:
@@ -52,8 +52,10 @@ class Gallery(pattern.Closable, pattern.Logger):
     pass
 
   def next_image(self):
+    if self._images is None:
+      self._refresh()
     if not self._images:
-      return None
+        return None
 
     image = random.choice(self._images)
     self.logger.debug('Next image: {0}'.format(image.id))

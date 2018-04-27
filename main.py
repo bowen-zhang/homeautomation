@@ -5,6 +5,8 @@ from common import app
 from google.apputils import app as gapp
 
 
+GOOGLE_DRIVE_FOLDER_ID = '1eRR7gsmM6ojJl7buVhqYXLJHOqLcr9rz'
+
 class HomeAutomationApp(app.App):
   def __init__(self, *args, **kwargs):
     super(HomeAutomationApp, self).__init__(__name__, *args, **kwargs)
@@ -16,7 +18,7 @@ class HomeAutomationApp(app.App):
     self._app.add_url_rule('/gallery/next', view_func=self._next_image)
 
     self._gallery = gallery.GoogleDriveGallery(
-        folder_id='0BwbugoG95MdfSmVRQ3NBNXhQMkE')
+        folder_id=GOOGLE_DRIVE_FOLDER_ID)
     self._gallery.start()
 
   def run(self):
