@@ -32,7 +32,7 @@ class Gallery(pattern.Closable, pattern.Logger):
 
   def __init__(self, *args, **kwargs):
     super(Gallery, self).__init__(*args, **kwargs)
-    self._images = []
+    self._images = None
     self._timer = None
     if not os.path.isdir(self._CACHE_PATH):
       os.makedirs(self._CACHE_PATH)
@@ -96,16 +96,23 @@ class GoogleDriveGallery(Gallery):
   def __init__(self, folder_id, *args, **kwargs):
     super(GoogleDriveGallery, self).__init__(*args, **kwargs)
     self._folder_id = folder_id
+    self._service = None
 
+  @property
+  def service(self):
+    if self._service:
+      return self._service
+  
     store = file.Storage('credentials.json')
     creds = store.get()
     if not creds or creds.invalid:
       flow = client.flow_from_clientsecrets('client_secret.json', self._SCOPES)
       creds = tools.run_flow(flow, store)
     self._service = build('drive', 'v3', http=creds.authorize(Http()))
+    return self._service
 
   def get_image_metadata_list(self):
-    results = self._service.files().list(
+    results = self.service.files().list(
         q='\'{0}\' in parents'.format(self._folder_id),
         pageSize=1000).execute()
     items = results.get('files', [])
@@ -113,7 +120,7 @@ class GoogleDriveGallery(Gallery):
       yield ImageMetadata(id=item['id'], name=item['name'])
 
   def get_image(self, id):
-    request = self._service.files().get_media(fileId=id)
+    request = self.service.files().get_media(fileId=id)
     return request.execute()
 
 
