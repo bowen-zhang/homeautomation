@@ -18,7 +18,7 @@ $(function() {
 	}
 
 	function UpdateClock() {
-		$time.text(moment().format("hh:mm A"));
+		$time.text(moment().format("hh:mm"));
 		setTimeout(UpdateClock, 60 * 1000);
 	}
 });
