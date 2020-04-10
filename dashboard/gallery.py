@@ -8,7 +8,7 @@ from apiclient.discovery import build
 from httplib2 import Http
 from oauth2client import file, client, tools
 
-from common import pattern
+from third_party.common import pattern
 
 
 class ImageMetadata(object):
@@ -55,7 +55,7 @@ class Gallery(pattern.Closable, pattern.Logger):
     if self._images is None:
       self._refresh()
     if not self._images:
-        return None
+      return None
 
     image = random.choice(self._images)
     self.logger.debug('Next image: {0}'.format(image.id))
@@ -102,7 +102,7 @@ class GoogleDriveGallery(Gallery):
   def service(self):
     if self._service:
       return self._service
-  
+
     store = file.Storage('credentials.json')
     creds = store.get()
     if not creds or creds.invalid:

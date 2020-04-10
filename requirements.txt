@@ -1,4 +1,0 @@
-flask
-google-api-python-client
-python-gflags
-google-apputils

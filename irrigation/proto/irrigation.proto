@@ -1,0 +1,56 @@
+syntax="proto3";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+message Location {
+	string name = 1;
+	string address = 2;
+	float lat = 3;
+	float lon = 4;
+}
+
+message Station {
+	int32 id = 1;
+	string name = 2;
+	uint32 pin = 3;
+}
+
+message NaiveModel {
+	google.protobuf.Timestamp last_update = 1;
+	float amount_in = 2;
+
+	float flow_rate_inpm = 3;			// inch per minute
+	float water_amount_in = 4;			// inch
+	float consumption_rate_inpd = 5;	// inch per day	
+}
+
+message Config {
+	Location location = 1;
+	repeated Station stations = 2;
+	uint32 schedule_hour = 3;
+	oneof model {
+		NaiveModel naive_model = 10;
+	}
+}
+
+service IrrigationService {
+  rpc GetConfig(google.protobuf.Empty) returns (Config) {}
+  rpc SubmitTasks(TaskList) returns (google.protobuf.Empty) {}
+  rpc GetCurrentTask(google.protobuf.Empty) returns (Task) {}
+  rpc GetPendingTasks(google.protobuf.Empty) returns (TaskList) {}
+}
+
+message TaskList {
+  repeated Task tasks = 1;
+}
+
+message Task {
+  int32 station_id = 1;
+  int32 duration_sec = 2;
+}
+
+message Status {
+  int32 running_station_id = 1;
+  int32 remaining_duration_sec = 2;
+}
