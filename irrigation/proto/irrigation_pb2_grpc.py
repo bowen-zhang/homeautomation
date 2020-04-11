@@ -16,22 +16,22 @@ class IrrigationServiceStub(object):
       channel: A grpc.Channel.
     """
     self.GetConfig = channel.unary_unary(
-        '/IrrigationService/GetConfig',
+        '/ha.irrigation.IrrigationService/GetConfig',
         request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
         response_deserializer=irrigation__pb2.Config.FromString,
         )
     self.SubmitTasks = channel.unary_unary(
-        '/IrrigationService/SubmitTasks',
+        '/ha.irrigation.IrrigationService/SubmitTasks',
         request_serializer=irrigation__pb2.TaskList.SerializeToString,
         response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
         )
     self.GetCurrentTask = channel.unary_unary(
-        '/IrrigationService/GetCurrentTask',
+        '/ha.irrigation.IrrigationService/GetCurrentTask',
         request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
         response_deserializer=irrigation__pb2.Task.FromString,
         )
     self.GetPendingTasks = channel.unary_unary(
-        '/IrrigationService/GetPendingTasks',
+        '/ha.irrigation.IrrigationService/GetPendingTasks',
         request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
         response_deserializer=irrigation__pb2.TaskList.FromString,
         )
@@ -94,5 +94,5 @@ def add_IrrigationServiceServicer_to_server(servicer, server):
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(
-      'IrrigationService', rpc_method_handlers)
+      'ha.irrigation.IrrigationService', rpc_method_handlers)
   server.add_generic_rpc_handlers((generic_handler,))

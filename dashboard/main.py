@@ -1,7 +1,7 @@
 from absl import app as absl_app
 import flask
-import gallery
 
+from dashboard import gallery
 from third_party.common import app
 
 

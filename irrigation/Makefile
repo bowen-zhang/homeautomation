@@ -1,5 +1,6 @@
 PYTHON = python3
-PROTOC = $(PYTHON) -m grpc_tools.protoc
+PROTOC = protoc
+PYTHON_PROTOC = $(PYTHON) -m grpc_tools.protoc
 PROTO_DIR = ./proto
 
 init:
@@ -8,11 +9,18 @@ init:
 	pip3 install -r requirements.txt --user
 
 build-proto:
-	rm -f $(PROTO_DIR)/*_pb2.py
-	$(PROTOC) -I=$(PROTO_DIR) --python_out=$(PROTO_DIR) --grpc_python_out=$(PROTO_DIR) $(PROTO_DIR)/*.proto
+	rm -f $(PROTO_DIR)/*pb2*.py
+	$(PYTHON_PROTOC) \
+		-I=$(PROTO_DIR) \
+		--python_out=$(PROTO_DIR) \
+		--grpc_python_out=$(PROTO_DIR) \
+		$(PROTO_DIR)/*.proto
 	sed -i -E "s/^import ([a-zA-Z0-9_]+_pb2) as/from . import \\1 as/" $(PROTO_DIR)/*_pb2*.py
 
 run: build-proto
+	PYTHONPATH=$(CURDIR)/.. $(PYTHON) main.py
+
+run-sim: build-proto
 	PYTHONPATH=$(CURDIR)/.. $(PYTHON) main.py --dry_run
 
 run-client: build-proto

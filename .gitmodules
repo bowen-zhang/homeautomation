@@ -1,3 +1,12 @@
 [submodule "third_party/common"]
 	path = third_party/common
 	url = https://github.com/bowen-zhang/common
+[submodule "third_party/grpc-web"]
+	path = third_party/grpc-web
+	url = git@github.com:grpc/grpc-web.git
+[submodule "third_party/protobuf"]
+	path = third_party/protobuf
+	url = git@github.com:protocolbuffers/protobuf.git
+[submodule "third_party/closure-library"]
+	path = third_party/closure-library
+	url = git@github.com:google/closure-library.git

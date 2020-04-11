@@ -88,10 +88,9 @@ class TaskManager(pattern.Worker):
   def submit_tasks(self, tasks):
     with self._lock:
       self._all_off()
-      self._tasks.clear()
       self._current_task = None
       self._expiration = None
-      self._tasks = tasks
+      self._tasks = [x for x in tasks]
 
   def get_tasks(self):
     with self._lock:

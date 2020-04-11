@@ -60,7 +60,7 @@ class IrrigationApp(app.App):
         config_proto=self.config, task_manager=self._task_manager)
     irrigation_pb2_grpc.add_IrrigationServiceServicer_to_server(
         service, server)
-    server.add_insecure_port('[::]:6001')
+    server.add_insecure_port('[::]:17051')
     server.start()
 
     self._task_manager.start()
