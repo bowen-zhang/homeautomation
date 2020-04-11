@@ -63,6 +63,9 @@ class TaskManager(pattern.Worker):
     self._expiration = None
     self._lock = threading.Lock()
 
+  def _on_start(self):
+    self.clear_tasks()
+
   def _on_run(self):
     now = time.time()
     with self._lock:
@@ -92,6 +95,8 @@ class TaskManager(pattern.Worker):
       self._current_task = None
       self._expiration = None
       self._tasks = tasks
+      for task in tasks:
+        print('Enqueuing task {0}'.format(task))
 
   def get_tasks(self):
     with self._lock:
@@ -129,7 +134,7 @@ class TaskManager(pattern.Worker):
     ])
 
   def _on(self, id):
-    station = next(x for x in self._stations if x.id)
+    station = next(x for x in self._stations if x.id == id)
     if not station:
       raise 'Station (id={0}) not found.'.format(id)
 
