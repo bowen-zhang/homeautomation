@@ -2,3 +2,4 @@ absl-py
 flask
 grpcio-tools
 requests
+RPi.GPIO

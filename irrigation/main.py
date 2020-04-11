@@ -38,10 +38,8 @@ class IrrigationApp(app.App):
     if FLAGS.dry_run:
       print('Running in simulation mode.')
       self._clock = test_lib.FakeClock()
-      self._gpio_module = test_lib.FakeGPIO()
     else:
       self._clock = Clock()
-      self._gpio_module = GPIO
 
     stations = [self._create_station(x) for x in self.config.stations]
     self._model = model_lib.ManualModel()
@@ -51,8 +49,8 @@ class IrrigationApp(app.App):
     if FLAGS.dry_run:
       return controller_lib.Station(proto, self._clock, gpio_module=test_lib.FakeGPIO())
     else:
-      import RPi
-      return controller_lib.Station(proto, self._clock, gpio_module=RPi.GPIO)
+      from RPi import GPIO
+      return controller_lib.Station(proto, self._clock, gpio_module=GPIO)
 
   def run(self):
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
@@ -64,6 +62,7 @@ class IrrigationApp(app.App):
     server.start()
 
     self._task_manager.start()
+    print('Running...')
     while True:
       time.sleep(1)
 
