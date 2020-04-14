@@ -107,7 +107,8 @@ class TaskManager(pattern.Worker):
             duration_sec=int(self._expiration - time.time()),
         ))
       for task in self._tasks:
-        tasks.append(irrigation_pb2.Task().CopyFrom(task))
+        tasks.append(irrigation_pb2.Task(
+            station_id=task.station_id, duration_sec=task.duration_sec))
 
       return tasks
 
