@@ -8,12 +8,15 @@ build-dashboard:
 	docker build -t dashboard/webserver -f dashboard-webserver.dockerfile .
 
 run-dashboard: build-dashboard
-	docker run -d --network=host --restart always dashboard/envoy
-	docker run -d --network=host --restart always dashboard/webserver
+	docker rm -f dashboard.envoy || true
+	docker rm -f dashboard.webserver || true
+	docker run --name dashboard.envoy -d --network=host --restart always dashboard/envoy
+	docker run --name dashboard.webserver -d --network=host --restart always dashboard/webserver
 
 build-irrigation:
 	docker build -t irrigation -f irrigation.dockerfile .
 	docker build -t irrigation:test -f irrigation-test.dockerfile .
 
 run-irrigation: build-irrigation
-	docker run -d --network=host --restart always irrigation
+	docker rm -f irrigation || true
+	docker run --name irrigation -d --network=host --restart always irrigation
