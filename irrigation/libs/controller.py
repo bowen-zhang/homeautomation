@@ -38,8 +38,8 @@ class Station(object):
     self._running = True
     self._start_time = self._clock.now()
     self._gpio.output(self._proto.pin, self._gpio.LOW)
-    print('Station {0} ("{1}"): started at {2}.'.format(
-        self._proto.id, self._proto.name, self._start_time))
+    print('Station {0} ("{1}", pin={2}): started at {3}.'.format(
+        self._proto.id, self._proto.name, self._proto.pin, self._start_time))
 
   def off(self):
     if not self._running:

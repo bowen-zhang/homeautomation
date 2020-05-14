@@ -19,4 +19,4 @@ build-irrigation:
 
 run-irrigation: build-irrigation
 	docker rm -f irrigation || true
-	docker run --name irrigation -d --network=host --restart always irrigation
+	docker run --name irrigation -d --privileged --network=host --restart always irrigation
