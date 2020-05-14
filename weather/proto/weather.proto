@@ -1,0 +1,38 @@
+syntax="proto3";
+
+package ha.weather;
+
+import "google/protobuf/timestamp.proto";
+import "shared/proto/common.proto";
+
+message Config {
+  string open_weather_map_api_key = 1;
+  ha.Endpoint kafka = 2;
+  int32 weather_service_port = 3;
+}
+
+message Snapshot {
+  string zipcode = 1;
+  google.protobuf.Timestamp timestamp = 2;
+  float temperature_c = 3;
+  float pressure_pa = 4;
+  float humidity = 5;
+  float visibility_m = 6;
+  float wind_speed_mps = 7;
+  float wind_direction = 8;
+  float last_1_hour_rain_amount_mm = 9;
+  float cloudiness = 10;
+}
+
+message GetSnapshotsRequest {
+  string zipcode = 1;
+  int32 max_days = 2;
+}
+
+message GetSnapshotsResponse {
+  repeated Snapshot snapshots = 1;
+}
+
+service WeatherService {
+  rpc GetSnapshots(GetSnapshotsRequest) returns (GetSnapshotsResponse) {};
+}

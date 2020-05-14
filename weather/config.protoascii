@@ -1,0 +1,6 @@
+open_weather_map_api_key: "e4e6bf673bc64bc4897cc04fe3a95263"
+kafka {
+  host: "server"
+  port: 9092
+}
+weather_service_port: 17060
