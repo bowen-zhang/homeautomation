@@ -9,12 +9,18 @@ init:
 
 build-js:
 	rm -rf ./build
-	mkdir ./build
+	mkdir -p ./build/irrigation
 	$(PROTOC) \
 		-I=../irrigation/proto \
-		--js_out=import_style=$(JS_IMPORT_STYLE):./build \
-		--grpc-web_out=mode=grpcweb:./build \
+		--js_out=import_style=$(JS_IMPORT_STYLE):./build/irrigation \
+		--grpc-web_out=mode=grpcweb:./build/irrigation \
 		../irrigation/proto/*.proto
+	mkdir -p ./build/weather
+	$(PROTOC) \
+		-I=../weather/proto -I../ \
+		--js_out=import_style=$(JS_IMPORT_STYLE):./build/weather \
+		--grpc-web_out=mode=grpcweb:./build/weather \
+		../weather/proto/*.proto
 	mkdir -p ./build/protobuf/src/google/protobuf
 	$(PROTOC) \
 		-I=../third_party/protobuf/src/ \
@@ -32,9 +38,15 @@ build-js:
 		-I=../third_party/protobuf/src/ \
 		--js_out=import_style=$(JS_IMPORT_STYLE):./build/protobuf/src/google/protobuf \
 		../third_party/protobuf/src/google/protobuf/timestamp.proto
+	$(PROTOC) \
+		-I=../third_party/protobuf/src/ \
+		--js_out=import_style=$(JS_IMPORT_STYLE):./build/protobuf/src/google/protobuf \
+		../third_party/protobuf/src/google/protobuf/duration.proto
 	java \
 					-jar $(CLOSURE_COMPILER) \
-					--js ./build \
+					--js ./build/irrigation \
+					--js ./build/weather \
+					--js ./build/protobuf \
 					--js ../third_party/closure-library/closure/goog \
 					--js ../third_party/protobuf/js/map.js \
 					--js ../third_party/protobuf/js/message.js \
@@ -47,7 +59,8 @@ build-js:
 					--js ../third_party/protobuf/js/binary/writer.js \
 					--js ../third_party/grpc-web/javascript \
 					--entry_point=goog:proto.ha.irrigation.IrrigationServiceClient \
-					--js_output_file web/js/irrigation.js
-
+					--entry_point=goog:proto.ha.weather.WeatherServiceClient \
+					--js_output_file web/js/services.js
+	
 run:
 	PYTHONPATH=$(CURDIR)/.. $(PYTHON) main.py

@@ -1,3 +1,5 @@
+Vue.component("apexchart", VueApexCharts);
+
 Vue.directive("bubble", (el, binding, vnode) => {
   Object.keys(binding.modifiers).forEach((event) => {
     // Bubble events of Vue components

@@ -1,3 +1,4 @@
 FROM envoyproxy/envoy
-EXPOSE 17080
+EXPOSE 17081
+EXPOSE 17082
 COPY dashboard/envoy.yaml /etc/envoy/envoy.yaml

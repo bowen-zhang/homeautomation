@@ -2,6 +2,14 @@
   <v-container>
     <v-row>
       <v-col cols="12">
+        <rain-dash :weather-service="weatherService"></rain-dash>
+      </v-col>
+      <v-col cols="12" v-for="zone in zones" :key="zone.id">
+        <irrigation-dash :zone="zone" :management-client="irrigationService"></irrigation-dash>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="12">
         <v-card>
           <v-toolbar dense flat dark color="green darken-3">
             <v-toolbar-title>Schedule</v-toolbar-title>
@@ -10,11 +18,11 @@
             <v-list two-line>
               <v-list-item
                 v-for="task in tasks"
-                :key="task.stationId"
-                :class="{ active: task.stationId === currentTask.stationId }"
+                :key="task.zoneId"
+                :class="{ active: task.zoneId === currentTask.zoneId }"
               >
                 <v-list-item-content>
-                  <v-list-item-title>{{ getStation(task.stationId) === undefined ? task.stationId : getStation(task.stationId).name }}</v-list-item-title>
+                  <v-list-item-title>{{ getZone(task.zoneId) === undefined ? task.zoneId : getZone(task.zoneId).name }}</v-list-item-title>
                   <v-list-item-subtitle>{{ Math.round(task.durationSec/60,1) }} minutes</v-list-item-subtitle>
                 </v-list-item-content>
                 <v-list-item-icon>
@@ -39,9 +47,23 @@
           </v-toolbar>
           <v-container>
             <v-row>
-              <v-col cols="6" v-for="station in availableStations" :key="station.id">
-                <v-card @click="addTask(station.id)" color="green lighten-4">
-                  <v-card-text>{{ station.name }}</v-card-text>
+              <v-col cols="6" v-for="zone in availableZones" :key="zone.id">
+                <v-card @click="addTask(zone.id)" color="green lighten-4">
+                  <v-menu bottom left>
+                    <template v-slot:activator="{ on }">
+                      <v-btn icon v-on="on" class="zone-context-menu">
+                        <v-icon medium>mdi-dots-vertical</v-icon>
+                      </v-btn>
+                    </template>
+
+                    <v-list>
+                      <v-list-item @click="editZone(zone)">
+                        <v-list-item-title>Edit</v-list-item-title>
+                      </v-list-item>
+                    </v-list>
+                  </v-menu>
+
+                  <v-card-text class="pt-6 pb-2 pr-4">{{ zone.name }}</v-card-text>
                   <v-card-actions></v-card-actions>
                 </v-card>
               </v-col>
@@ -51,6 +73,7 @@
       </v-col>
     </v-row>
     <irrigation-duration ref="irrigationDuration"></irrigation-duration>
+    <irrigation-zone-edit ref="irrigationZoneEdit"></irrigation-zone-edit>
     <v-snackbar v-model="showNotification">{{ notificationText }}</v-snackbar>
   </v-container>
 </template>
@@ -58,43 +81,54 @@
 module.exports = {
   props: ["api"],
   data: () => ({
-    client: null,
-    stations: [],
+    irrigationService: null,
+    irrigationService: null,
+    weatherService: null,
+    zones: [],
     tasks: [],
     currentTask: {},
     showNotification: false,
     notificationText: ""
   }),
   components: {
-    "irrigation-duration": httpVueLoader("js/views/irrigation-duration.vue")
+    "irrigation-dash": httpVueLoader("js/views/irrigation-dash.vue"),
+    "irrigation-duration": httpVueLoader("js/views/irrigation-duration.vue"),
+    "irrigation-zone-edit": httpVueLoader("js/views/irrigation-zone-edit.vue"),
+    "rain-dash": httpVueLoader("js/views/rain-dash.vue")
   },
   created() {
-    this.client = new proto.ha.irrigation.IrrigationServiceClient(
-      "http://server:17080"
+    this.weatherService = new proto.ha.weather.WeatherServiceClient(
+      "http://server:17082"
     );
-    this.client.getConfig(
-      new proto.google.protobuf.Empty(),
-      {},
-      (err, response) => {
-        if (response) {
-          this.stations = response.toObject().stationsList;
-        } else {
-          this.stations = [];
-        }
-      }
+    this.irrigationService = new proto.ha.irrigation.IrrigationServiceClient(
+      "http://server:17081"
     );
+    this.refreshZones();
     this.refreshTasks();
   },
   computed: {
-    availableStations() {
-      return this.stations.filter(
-        station => this.tasks.find(t => t.stationId == station.id) === undefined
+    availableZones() {
+      return this.zones.filter(
+        zone => this.tasks.find(t => t.zoneId == zone.id) === undefined
       );
     }
   },
   methods: {
+    refreshZones() {
+      this.irrigationService.getAllZones(
+        new proto.google.protobuf.Empty(),
+        {},
+        (err, response) => {
+          if (response) {
+            this.zones = response.toObject().zonesList;
+          } else {
+            this.zones = [];
+          }
+        }
+      );
+    },
     refreshTasks() {
-      this.client.getCurrentTask(
+      this.irrigationService.getCurrentTask(
         new proto.google.protobuf.Empty(),
         {},
         (err, response) => {
@@ -105,7 +139,7 @@ module.exports = {
           }
         }
       );
-      this.client.getPendingTasks(
+      this.irrigationService.getPendingTasks(
         new proto.google.protobuf.Empty(),
         {},
         (err, response) => {
@@ -117,15 +151,15 @@ module.exports = {
         }
       );
     },
-    getStation(stationId) {
-      return this.stations.find(x => x.id === stationId);
+    getZone(zoneId) {
+      return this.zones.find(x => x.id === zoneId);
     },
-    addTask(stationId) {
+    addTask(zoneId) {
       this.$refs.irrigationDuration
         .open()
         .then(durationSec => {
           this.tasks.push({
-            stationId: stationId,
+            zoneId: zoneId,
             durationSec: durationSec
           });
         })
@@ -139,10 +173,12 @@ module.exports = {
       this.tasks.forEach(task => {
         tasksToStart
           .addTasks()
-          .setStationId(task.stationId)
-          .setDurationSec(task.durationSec);
+          .setZoneId(task.zoneId)
+          .setDuration(
+            new proto.google.protobuf.Duration().setSeconds(task.durationSec)
+          );
       });
-      this.client.submitTasks(tasksToStart, {}, (err, response) => {
+      this.irrigationService.submitTasks(tasksToStart, {}, (err, response) => {
         if (response) {
           this.notificationText = "Task is submitted.";
           setTimeout(this.refreshTasks, 1000);
@@ -154,7 +190,7 @@ module.exports = {
     },
     clear() {
       this.tasks = [];
-      this.client.submitTasks(
+      this.irrigationService.submitTasks(
         new proto.ha.irrigation.TaskList(),
         {},
         (err, response) => {
@@ -167,6 +203,30 @@ module.exports = {
           this.showNotification = true;
         }
       );
+    },
+    editZone(zone) {
+      const zoneToEdit = _.cloneDeep(zone);
+      this.$refs.irrigationZoneEdit
+        .open(zoneToEdit)
+        .then(updatedZone => {
+          updatedZone = new proto.ha.irrigation.Zone()
+            .setId(updatedZone.id)
+            .setName(updatedZone.name)
+            .setPin(updatedZone.pin)
+            .setFlowRateMmpm(updatedZone.flowRateMmpm)
+            .setMaxWaterAmountMm(updatedZone.maxWaterAmountMm)
+            .setEvaporationRateMmpm(updatedZone.evaporationRateMmpm);
+          this.irrigationService.saveZone(updatedZone, {}, (err, response) => {
+            if (response) {
+              this.notificationText = "Zone is saved.";
+              this.refreshZones();
+            } else {
+              this.notificationText = "Failed to save zone.";
+            }
+            this.showNotification = true;
+          });
+        })
+        .catch(() => {});
     }
   }
 };
@@ -174,5 +234,12 @@ module.exports = {
 <style scoped>
 .active {
   border: solid 2px #43a047;
+}
+.zone-context-menu {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  color: darkgreen;
+  width: 20px;
 }
 </style>
