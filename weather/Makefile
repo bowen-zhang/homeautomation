@@ -17,5 +17,8 @@ build-proto:
 		$(PROTO_DIR)/*.proto
 	sed -i -E "s/^import ([a-zA-Z0-9_]+_pb2) as/from . import \\1 as/" $(PROTO_DIR)/*_pb2*.py
 
+setup: build-proto
+	PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION='python' PYTHONPATH=$(CURDIR)/.. $(PYTHON) setup.py
+
 run: build-proto
 	PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION='python' PYTHONPATH=$(CURDIR)/.. $(PYTHON) main.py
