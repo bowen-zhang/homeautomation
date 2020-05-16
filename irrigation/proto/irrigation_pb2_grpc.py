@@ -6,156 +6,271 @@ from . import irrigation_pb2 as irrigation__pb2
 
 
 class IrrigationServiceStub(object):
-    """Missing associated documentation comment in .proto file"""
+  # missing associated documentation comment in .proto file
+  pass
 
-    def __init__(self, channel):
-        """Constructor.
+  def __init__(self, channel):
+    """Constructor.
 
-        Args:
-            channel: A grpc.Channel.
-        """
-        self.GetConfig = channel.unary_unary(
-                '/ha.irrigation.IrrigationService/GetConfig',
-                request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
-                response_deserializer=irrigation__pb2.Config.FromString,
-                )
-        self.SubmitTasks = channel.unary_unary(
-                '/ha.irrigation.IrrigationService/SubmitTasks',
-                request_serializer=irrigation__pb2.TaskList.SerializeToString,
-                response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
-                )
-        self.GetCurrentTask = channel.unary_unary(
-                '/ha.irrigation.IrrigationService/GetCurrentTask',
-                request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
-                response_deserializer=irrigation__pb2.Task.FromString,
-                )
-        self.GetPendingTasks = channel.unary_unary(
-                '/ha.irrigation.IrrigationService/GetPendingTasks',
-                request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
-                response_deserializer=irrigation__pb2.TaskList.FromString,
-                )
+    Args:
+      channel: A grpc.Channel.
+    """
+    self.GetConfig = channel.unary_unary(
+        '/ha.irrigation.IrrigationService/GetConfig',
+        request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+        response_deserializer=irrigation__pb2.Config.FromString,
+        )
+    self.GetAlerts = channel.unary_unary(
+        '/ha.irrigation.IrrigationService/GetAlerts',
+        request_serializer=irrigation__pb2.GetAlertsRequest.SerializeToString,
+        response_deserializer=irrigation__pb2.GetAlertsResponse.FromString,
+        )
+    self.DismissAlert = channel.unary_unary(
+        '/ha.irrigation.IrrigationService/DismissAlert',
+        request_serializer=irrigation__pb2.DismissAlertRequest.SerializeToString,
+        response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+        )
+    self.GetAllZones = channel.unary_unary(
+        '/ha.irrigation.IrrigationService/GetAllZones',
+        request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+        response_deserializer=irrigation__pb2.ZoneList.FromString,
+        )
+    self.SaveZone = channel.unary_unary(
+        '/ha.irrigation.IrrigationService/SaveZone',
+        request_serializer=irrigation__pb2.Zone.SerializeToString,
+        response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+        )
+    self.GetWaterLevelHistory = channel.unary_unary(
+        '/ha.irrigation.IrrigationService/GetWaterLevelHistory',
+        request_serializer=irrigation__pb2.GetWaterLevelHistoryRequest.SerializeToString,
+        response_deserializer=irrigation__pb2.GetWaterLevelHistoryResponse.FromString,
+        )
+    self.SubmitTasks = channel.unary_unary(
+        '/ha.irrigation.IrrigationService/SubmitTasks',
+        request_serializer=irrigation__pb2.TaskList.SerializeToString,
+        response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+        )
+    self.GetCurrentTask = channel.unary_unary(
+        '/ha.irrigation.IrrigationService/GetCurrentTask',
+        request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+        response_deserializer=irrigation__pb2.Task.FromString,
+        )
+    self.GetPendingTasks = channel.unary_unary(
+        '/ha.irrigation.IrrigationService/GetPendingTasks',
+        request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+        response_deserializer=irrigation__pb2.TaskList.FromString,
+        )
+    self.EnableAutoSchedule = channel.unary_unary(
+        '/ha.irrigation.IrrigationService/EnableAutoSchedule',
+        request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+        response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+        )
+    self.DisableAutoSchedule = channel.unary_unary(
+        '/ha.irrigation.IrrigationService/DisableAutoSchedule',
+        request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+        response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+        )
 
 
 class IrrigationServiceServicer(object):
-    """Missing associated documentation comment in .proto file"""
+  # missing associated documentation comment in .proto file
+  pass
 
-    def GetConfig(self, request, context):
-        """Missing associated documentation comment in .proto file"""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
+  def GetConfig(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
 
-    def SubmitTasks(self, request, context):
-        """Missing associated documentation comment in .proto file"""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
+  def GetAlerts(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
 
-    def GetCurrentTask(self, request, context):
-        """Missing associated documentation comment in .proto file"""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
+  def DismissAlert(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
 
-    def GetPendingTasks(self, request, context):
-        """Missing associated documentation comment in .proto file"""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
+  def GetAllZones(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def SaveZone(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def GetWaterLevelHistory(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def SubmitTasks(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def GetCurrentTask(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def GetPendingTasks(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def EnableAutoSchedule(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def DisableAutoSchedule(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
 
 
 def add_IrrigationServiceServicer_to_server(servicer, server):
-    rpc_method_handlers = {
-            'GetConfig': grpc.unary_unary_rpc_method_handler(
-                    servicer.GetConfig,
-                    request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
-                    response_serializer=irrigation__pb2.Config.SerializeToString,
-            ),
-            'SubmitTasks': grpc.unary_unary_rpc_method_handler(
-                    servicer.SubmitTasks,
-                    request_deserializer=irrigation__pb2.TaskList.FromString,
-                    response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
-            ),
-            'GetCurrentTask': grpc.unary_unary_rpc_method_handler(
-                    servicer.GetCurrentTask,
-                    request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
-                    response_serializer=irrigation__pb2.Task.SerializeToString,
-            ),
-            'GetPendingTasks': grpc.unary_unary_rpc_method_handler(
-                    servicer.GetPendingTasks,
-                    request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
-                    response_serializer=irrigation__pb2.TaskList.SerializeToString,
-            ),
-    }
-    generic_handler = grpc.method_handlers_generic_handler(
-            'ha.irrigation.IrrigationService', rpc_method_handlers)
-    server.add_generic_rpc_handlers((generic_handler,))
+  rpc_method_handlers = {
+      'GetConfig': grpc.unary_unary_rpc_method_handler(
+          servicer.GetConfig,
+          request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+          response_serializer=irrigation__pb2.Config.SerializeToString,
+      ),
+      'GetAlerts': grpc.unary_unary_rpc_method_handler(
+          servicer.GetAlerts,
+          request_deserializer=irrigation__pb2.GetAlertsRequest.FromString,
+          response_serializer=irrigation__pb2.GetAlertsResponse.SerializeToString,
+      ),
+      'DismissAlert': grpc.unary_unary_rpc_method_handler(
+          servicer.DismissAlert,
+          request_deserializer=irrigation__pb2.DismissAlertRequest.FromString,
+          response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+      ),
+      'GetAllZones': grpc.unary_unary_rpc_method_handler(
+          servicer.GetAllZones,
+          request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+          response_serializer=irrigation__pb2.ZoneList.SerializeToString,
+      ),
+      'SaveZone': grpc.unary_unary_rpc_method_handler(
+          servicer.SaveZone,
+          request_deserializer=irrigation__pb2.Zone.FromString,
+          response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+      ),
+      'GetWaterLevelHistory': grpc.unary_unary_rpc_method_handler(
+          servicer.GetWaterLevelHistory,
+          request_deserializer=irrigation__pb2.GetWaterLevelHistoryRequest.FromString,
+          response_serializer=irrigation__pb2.GetWaterLevelHistoryResponse.SerializeToString,
+      ),
+      'SubmitTasks': grpc.unary_unary_rpc_method_handler(
+          servicer.SubmitTasks,
+          request_deserializer=irrigation__pb2.TaskList.FromString,
+          response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+      ),
+      'GetCurrentTask': grpc.unary_unary_rpc_method_handler(
+          servicer.GetCurrentTask,
+          request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+          response_serializer=irrigation__pb2.Task.SerializeToString,
+      ),
+      'GetPendingTasks': grpc.unary_unary_rpc_method_handler(
+          servicer.GetPendingTasks,
+          request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+          response_serializer=irrigation__pb2.TaskList.SerializeToString,
+      ),
+      'EnableAutoSchedule': grpc.unary_unary_rpc_method_handler(
+          servicer.EnableAutoSchedule,
+          request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+          response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+      ),
+      'DisableAutoSchedule': grpc.unary_unary_rpc_method_handler(
+          servicer.DisableAutoSchedule,
+          request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+          response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+      ),
+  }
+  generic_handler = grpc.method_handlers_generic_handler(
+      'ha.irrigation.IrrigationService', rpc_method_handlers)
+  server.add_generic_rpc_handlers((generic_handler,))
 
 
- # This class is part of an EXPERIMENTAL API.
-class IrrigationService(object):
-    """Missing associated documentation comment in .proto file"""
+class ControllerServiceStub(object):
+  # missing associated documentation comment in .proto file
+  pass
 
-    @staticmethod
-    def GetConfig(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/ha.irrigation.IrrigationService/GetConfig',
-            google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
-            irrigation__pb2.Config.FromString,
-            options, channel_credentials,
-            call_credentials, compression, wait_for_ready, timeout, metadata)
+  def __init__(self, channel):
+    """Constructor.
 
-    @staticmethod
-    def SubmitTasks(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/ha.irrigation.IrrigationService/SubmitTasks',
-            irrigation__pb2.TaskList.SerializeToString,
-            google_dot_protobuf_dot_empty__pb2.Empty.FromString,
-            options, channel_credentials,
-            call_credentials, compression, wait_for_ready, timeout, metadata)
+    Args:
+      channel: A grpc.Channel.
+    """
+    self.Start = channel.unary_unary(
+        '/ha.irrigation.ControllerService/Start',
+        request_serializer=irrigation__pb2.Task.SerializeToString,
+        response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+        )
+    self.Stop = channel.unary_unary(
+        '/ha.irrigation.ControllerService/Stop',
+        request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+        response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+        )
 
-    @staticmethod
-    def GetCurrentTask(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/ha.irrigation.IrrigationService/GetCurrentTask',
-            google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
-            irrigation__pb2.Task.FromString,
-            options, channel_credentials,
-            call_credentials, compression, wait_for_ready, timeout, metadata)
 
-    @staticmethod
-    def GetPendingTasks(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/ha.irrigation.IrrigationService/GetPendingTasks',
-            google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
-            irrigation__pb2.TaskList.FromString,
-            options, channel_credentials,
-            call_credentials, compression, wait_for_ready, timeout, metadata)
+class ControllerServiceServicer(object):
+  # missing associated documentation comment in .proto file
+  pass
+
+  def Start(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def Stop(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+
+def add_ControllerServiceServicer_to_server(servicer, server):
+  rpc_method_handlers = {
+      'Start': grpc.unary_unary_rpc_method_handler(
+          servicer.Start,
+          request_deserializer=irrigation__pb2.Task.FromString,
+          response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+      ),
+      'Stop': grpc.unary_unary_rpc_method_handler(
+          servicer.Stop,
+          request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+          response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+      ),
+  }
+  generic_handler = grpc.method_handlers_generic_handler(
+      'ha.irrigation.ControllerService', rpc_method_handlers)
+  server.add_generic_rpc_handlers((generic_handler,))

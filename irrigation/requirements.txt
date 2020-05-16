@@ -1,5 +1,9 @@
 absl-py
 flask
 grpcio-tools
+kafka-python
+mongomock
+pymongo
 requests
+retrying
 RPi.GPIO

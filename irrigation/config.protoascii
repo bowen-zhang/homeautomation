@@ -1,52 +1,38 @@
 location {
   name: "Home"
-  address: "1624 104th Ave SE, Bellevue, WA 98004"
+  address: "1624 104th Ave SE"
+  city: "Bellevue"
+  state: "WA"
+  zipcode: "98004"
   lat: 47.595876
   lon: -122.20155
 }
-stations {
-  id: 1
-  name: "Front Yard - North (Grass)"
-  pin: 19
+auto_schedule: true
+watering_windows: {
+  from_hour: 5
+  to_hour: 7
 }
-stations {
-  id: 2
-  name: "Front Yard - Center (Plant)"
-  pin: 13
+watering_windows: {
+  from_hour: 4
+  to_hour: 6
 }
-stations {
-  id: 3
-  name: "Front Yard - South (Plant)"
-  pin: 6
-}
-stations {
-  id: 4
-  name: "Front Yard - Center (Grass)"
-  pin: 5
-}
-stations {
-  id: 5
-  name: "Back Yard - South (Grass)"
-  pin: 21
-}
-stations {
-  id: 6
-  name: "Back Yard - Plant"
-  pin: 20
-}
-stations {
-  id: 7
-  name: "Back Yard - Center (Grass)"
-  pin: 16
-}
-schedule_hour: 5
-naive_model {
-  last_update {
-    seconds: 1565931619
-    nanos: 154968000
+min_water_amount_mm: 0.3
+controller: {
+  no_watering_windows: {
+    from_hour: 21
+    to_hour: 4
   }
-  amount_in: 0.21443985
-  flow_rate_inpm: 0.033
-  water_amount_in: 0.5
-  consumption_rate_inpd: 0.1428
+  max_running_secs_per_day: 3600
+}
+kafka {
+  host: "server"
+  port: 9092
+}
+irrigation_service {
+  host: "server"
+  port: 17052
+}
+controller_service {
+  host: "localhost"
+  port: 17051
 }

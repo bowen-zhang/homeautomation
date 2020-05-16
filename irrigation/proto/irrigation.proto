@@ -2,45 +2,79 @@ syntax="proto3";
 
 package ha.irrigation;
 
-import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
 import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+// Database Models
+message Zone {
+	int32 id = 1;
+	string name = 2;
+  uint32 pin = 3;
+  float flow_rate_mmpm = 4;
+  float max_water_amount_mm = 5;
+  float evaporation_rate_mmpm = 6;
+}
+
+message WaterLevel {
+  google.protobuf.Timestamp timeslot = 1;
+  int32 zone_id = 2;
+  float change_amount_mm = 3;
+  float current_amount_mm = 4;
+}
+
+message Alert {
+  google.protobuf.Timestamp timestamp = 1;
+  string message = 2;
+}
+
+// Config
 
 message Location {
 	string name = 1;
-	string address = 2;
-	float lat = 3;
-	float lon = 4;
+  string address = 2;
+  string city = 3;
+  string state = 4;
+  string zipcode = 5;
+	float lat = 6;
+	float lon = 7;
 }
 
-message Station {
-	int32 id = 1;
-	string name = 2;
-	uint32 pin = 3;
+message Endpoint {
+  string host = 1;
+  int32 port = 2;
 }
 
-message NaiveModel {
-	google.protobuf.Timestamp last_update = 1;
-	float amount_in = 2;
+message TimeWindow {
+  uint32 from_hour = 1;
+  uint32 to_hour = 2;
+}
 
-	float flow_rate_inpm = 3;			// inch per minute
-	float water_amount_in = 4;			// inch
-	float consumption_rate_inpd = 5;	// inch per day	
+message ControllerSettings {
+  repeated TimeWindow no_watering_windows = 1;
+  int32 max_running_secs_per_day = 2;
 }
 
 message Config {
 	Location location = 1;
-	repeated Station stations = 2;
-	uint32 schedule_hour = 3;
-	oneof model {
-		NaiveModel naive_model = 10;
-	}
+	repeated Zone zones = 2;
+  bool auto_schedule = 3;
+  repeated TimeWindow watering_windows = 4;
+  float min_water_amount_mm = 5;
+  ControllerSettings controller = 6;
+  Endpoint kafka = 7;
+  Endpoint irrigation_service = 8;
+  Endpoint controller_service = 9;
 }
 
-service IrrigationService {
-  rpc GetConfig(google.protobuf.Empty) returns (Config) {}
-  rpc SubmitTasks(TaskList) returns (google.protobuf.Empty) {}
-  rpc GetCurrentTask(google.protobuf.Empty) returns (Task) {}
-  rpc GetPendingTasks(google.protobuf.Empty) returns (TaskList) {}
+message ZoneList {
+  repeated Zone zones = 1;
+}
+
+enum By {
+  UNKNOWN = 0;
+  USER = 1;
+  SCHEDULER = 2;
 }
 
 message TaskList {
@@ -48,11 +82,81 @@ message TaskList {
 }
 
 message Task {
-  int32 station_id = 1;
-  int32 duration_sec = 2;
+  int32 zone_id = 1;
+  google.protobuf.Duration duration = 2;
+  By by = 3;
 }
 
-message Status {
-  int32 running_station_id = 1;
-  int32 remaining_duration_sec = 2;
+message GetWaterLevelHistoryRequest {
+  int32 zone_id = 1;
+  int32 max_days = 2;
+}
+
+message GetWaterLevelHistoryResponse {
+  repeated WaterLevel water_levels = 1;
+}
+
+message GetAlertsRequest {
+  int32 max_count = 1;
+}
+
+message GetAlertsResponse {
+  repeated Alert alerts = 1;
+}
+
+message DismissAlertRequest {
+  google.protobuf.Timestamp timestamp = 1;
+}
+
+service IrrigationService {
+  rpc GetConfig(google.protobuf.Empty) returns (Config) {}
+
+  rpc GetAlerts(GetAlertsRequest) returns (GetAlertsResponse) {}
+  rpc DismissAlert(DismissAlertRequest) returns (google.protobuf.Empty) {}
+
+  rpc GetAllZones(google.protobuf.Empty) returns (ZoneList) {}
+  rpc SaveZone(Zone) returns (google.protobuf.Empty) {}
+
+  rpc GetWaterLevelHistory(GetWaterLevelHistoryRequest) returns (GetWaterLevelHistoryResponse) {}
+
+  rpc SubmitTasks(TaskList) returns (google.protobuf.Empty) {}
+  rpc GetCurrentTask(google.protobuf.Empty) returns (Task) {}
+  rpc GetPendingTasks(google.protobuf.Empty) returns (TaskList) {}
+
+  rpc EnableAutoSchedule(google.protobuf.Empty) returns (google.protobuf.Empty) {}
+  rpc DisableAutoSchedule(google.protobuf.Empty) returns (google.protobuf.Empty) {}
+}
+
+service ControllerService {
+  rpc Start(Task) returns (google.protobuf.Empty) {}
+  rpc Stop(google.protobuf.Empty) returns (google.protobuf.Empty) {}
+}
+
+// Kafka Events
+
+message ZoneEvent {
+  google.protobuf.Timestamp timestamp = 1;
+  int32 zone_id = 2;
+
+  enum Action {
+    UNKNOWN = 0;
+    OFF = 1;
+    ON = 2;
+  }
+  Action action = 3;
+
+  By by = 4;
+}
+
+message WaterLevelChangeEvent {
+  google.protobuf.Timestamp timestamp = 1;
+  int32 zone_id = 2;
+  float change_amount_mm = 3;
+}
+
+message WaterLevelEvent {
+  google.protobuf.Timestamp timeslot = 1;
+  int32 zone_id = 2;
+  float current_amount_mm = 3;
+
 }

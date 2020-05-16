@@ -1,22 +1,59 @@
+PYTHON = python3
+PROTOC = protoc
+PYTHON_PROTOC = $(PYTHON) -m grpc_tools.protoc
+PROTO_DIR = ./proto
+
 init:
 	curl -sSL https://get.docker.com | sh
 	sudo usermod -aG docker pi
 	newgrp docker
+	docker pull bitnami/zookeeper
+	docker pull bitnami/kafka
+	docker pull envoyproxy/envoy
+
+build-proto:
+	rm -f $(PROTO_DIR)/*pb2*.py
+	$(PYTHON_PROTOC) \
+		-I=$(PROTO_DIR) \
+		--python_out=$(PROTO_DIR) \
+		--grpc_python_out=$(PROTO_DIR) \
+		$(PROTO_DIR)/*.proto
+	sed -i -E "s/^import ([a-zA-Z0-9_]+_pb2) as/from . import \\1 as/" $(PROTO_DIR)/*_pb2*.py
+
+watch-kafka:
+	PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION='python' PYTHONPATH=$(CURDIR) python3 tools/kafka_watcher.py
 
 build-dashboard:
-	docker build -t dashboard/envoy -f dashboard-envoy.dockerfile .
+	docker build -t dashboard/envoy:v2 -f dashboard-envoy.dockerfile .
 	docker build -t dashboard/webserver -f dashboard-webserver.dockerfile .
 
 run-dashboard: build-dashboard
-	docker rm -f dashboard.envoy || true
+	docker rm -f dashboard.envoy.v2 || true
 	docker rm -f dashboard.webserver || true
-	docker run --name dashboard.envoy -d --network=host --restart always dashboard/envoy
+	docker run --name dashboard.envoy.v2 -d --network=host --restart always dashboard/envoy:v2
 	docker run --name dashboard.webserver -d --network=host --restart always dashboard/webserver
 
-build-irrigation:
-	docker build -t irrigation -f irrigation.dockerfile .
-	docker build -t irrigation:test -f irrigation-test.dockerfile .
+irrigation-controller:
+	docker build -t irrigation:controller -f irrigation-controller.dockerfile .
+	docker rm -f irrigation.controller || true
+	docker run --name irrigation.controller -d --network=host --restart always irrigation:controller
 
-run-irrigation: build-irrigation
-	docker rm -f irrigation || true
-	docker run --name irrigation -d --privileged --network=host --restart always irrigation
+irrigation-monitor:
+	docker build -t irrigation:monitor -f irrigation-monitor.dockerfile .
+	docker rm -f irrigation.monitor || true
+	docker run --name irrigation.monitor -d --network=host --restart always irrigation:monitor
+
+irrigation-frontend:
+	docker build -t irrigation:frontend -f irrigation-frontend.dockerfile .
+	docker rm -f irrigation.frontend || true
+	docker run --name irrigation.frontend -d --network=host --restart always irrigation:frontend
+
+irrigation: irrigation-controller irrigation-monitor irrigation-frontend
+
+
+build-weather:
+	docker build -t weather -f weather.dockerfile .
+
+run-weather: build-weather
+	docker rm -f weather || true
+	docker run --name weather -d --network=host --restart always weather
