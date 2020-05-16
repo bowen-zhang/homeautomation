@@ -1,0 +1,19 @@
+syntax="proto3";
+
+package ha;
+
+
+message Location {
+	string name = 1;
+  string address = 2;
+  string city = 3;
+  string state = 4;
+  string zipcode = 5;
+	float lat = 6;
+	float lon = 7;
+}
+
+message Endpoint {
+  string host = 1;
+  int32 port = 2;
+}
