@@ -97,7 +97,8 @@ class Controller(pattern.Worker):
 
   def _stop(self):
     zone_id = self._running_zone.id
-    duration = self._context.clock.now() - self._start_time
+    end_time = self._context.clock.now()
+    duration = end_time - self._start_time
 
     self.logger.info('Stopping zone {0}...'.format(zone_id))
     self._running_zone.off()
@@ -112,7 +113,7 @@ class Controller(pattern.Worker):
         action=irrigation_pb2.ZoneEvent.Action.OFF,
         by=irrigation_pb2.By.UNKNOWN,
     )
-    event.timestamp.FromDatetime(self._context.clock.now())
+    event.timestamp.FromDatetime(end_time)
     self._async(self._context.send_event, topics.Irrigation.ZONE_TOPIC, event)
 
   def _async(self, func, *args, **kwargs):

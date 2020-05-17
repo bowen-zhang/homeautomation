@@ -16,6 +16,13 @@ message Zone {
   float evaporation_rate_mmpm = 6;
 }
 
+message Run {
+  int32 zone_id = 1;
+  google.protobuf.Timestamp start_at = 2;
+  google.protobuf.Timestamp stop_at = 3;
+  float water_amount_mm = 4;
+}
+
 message WaterLevel {
   google.protobuf.Timestamp timeslot = 1;
   int32 zone_id = 2;
@@ -63,8 +70,8 @@ message Config {
   float min_water_amount_mm = 5;
   ControllerSettings controller = 6;
   Endpoint kafka = 7;
-  Endpoint irrigation_service = 8;
-  Endpoint controller_service = 9;
+  Endpoint irrigation_service = 9;
+  Endpoint controller_service = 10;
 }
 
 message ZoneList {

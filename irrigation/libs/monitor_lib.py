@@ -58,6 +58,14 @@ class IrrigationMonitor(kafka_util.EventConsumer):
                 self._last_zone_event.timestamp.ToDatetime())
     water_amount_mm = zone.flow_rate_mmpm * duration.total_seconds() / 60
 
+    run = irrigation_pb2.Run(
+        zone_id=zone_event.zone_id,
+        start_at=self._last_zone_event.timestamp,
+        stop_at=zone_event.timestamp,
+        water_amount_mm=water_amount_mm,
+    )
+    self._context.storage.runs.save(run)
+
     event = irrigation_pb2.WaterLevelChangeEvent(
         timestamp=zone_event.timestamp,
         zone_id=zone_event.zone_id,

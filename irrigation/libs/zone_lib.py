@@ -30,6 +30,10 @@ class Zone(pattern.Logger):
     return self._proto.id
 
   @property
+  def proto(self):
+    return self._proto
+
+  @property
   def running(self):
     return self._running
 

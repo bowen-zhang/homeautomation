@@ -1,7 +1,7 @@
 PYTHON = python3
 PROTOC = protoc
 PYTHON_PROTOC = $(PYTHON) -m grpc_tools.protoc
-PROTO_DIR = ./proto
+PROTO_DIR = ./shared/proto
 
 init:
 	curl -sSL https://get.docker.com | sh
@@ -23,11 +23,9 @@ build-proto:
 watch-kafka:
 	PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION='python' PYTHONPATH=$(CURDIR) python3 tools/kafka_watcher.py
 
-build-dashboard:
+dashboard:
 	docker build -t dashboard/envoy:v2 -f dashboard-envoy.dockerfile .
 	docker build -t dashboard/webserver -f dashboard-webserver.dockerfile .
-
-run-dashboard: build-dashboard
 	docker rm -f dashboard.envoy.v2 || true
 	docker rm -f dashboard.webserver || true
 	docker run --name dashboard.envoy.v2 -d --network=host --restart always dashboard/envoy:v2
@@ -50,10 +48,7 @@ irrigation-frontend:
 
 irrigation: irrigation-controller irrigation-monitor irrigation-frontend
 
-
-build-weather:
+weather:
 	docker build -t weather -f weather.dockerfile .
-
-run-weather: build-weather
 	docker rm -f weather || true
 	docker run --name weather -d --network=host --restart always weather

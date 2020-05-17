@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='ha.irrigation',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=b'\n\x10irrigation.proto\x12\rha.irrigation\x1a\x1egoogle/protobuf/duration.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x81\x01\n\x04Zone\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0b\n\x03pin\x18\x03 \x01(\r\x12\x16\n\x0e\x66low_rate_mmpm\x18\x04 \x01(\x02\x12\x1b\n\x13max_water_amount_mm\x18\x05 \x01(\x02\x12\x1d\n\x15\x65vaporation_rate_mmpm\x18\x06 \x01(\x02\"\x80\x01\n\nWaterLevel\x12,\n\x08timeslot\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0f\n\x07zone_id\x18\x02 \x01(\x05\x12\x18\n\x10\x63hange_amount_mm\x18\x03 \x01(\x02\x12\x19\n\x11\x63urrent_amount_mm\x18\x04 \x01(\x02\"G\n\x05\x41lert\x12-\n\ttimestamp\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0f\n\x07message\x18\x02 \x01(\t\"q\n\x08Location\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0f\n\x07\x61\x64\x64ress\x18\x02 \x01(\t\x12\x0c\n\x04\x63ity\x18\x03 \x01(\t\x12\r\n\x05state\x18\x04 \x01(\t\x12\x0f\n\x07zipcode\x18\x05 \x01(\t\x12\x0b\n\x03lat\x18\x06 \x01(\x02\x12\x0b\n\x03lon\x18\x07 \x01(\x02\"&\n\x08\x45ndpoint\x12\x0c\n\x04host\x18\x01 \x01(\t\x12\x0c\n\x04port\x18\x02 \x01(\x05\"0\n\nTimeWindow\x12\x11\n\tfrom_hour\x18\x01 \x01(\r\x12\x0f\n\x07to_hour\x18\x02 \x01(\r\"n\n\x12\x43ontrollerSettings\x12\x36\n\x13no_watering_windows\x18\x01 \x03(\x0b\x32\x19.ha.irrigation.TimeWindow\x12 \n\x18max_running_secs_per_day\x18\x02 \x01(\x05\"\x89\x03\n\x06\x43onfig\x12)\n\x08location\x18\x01 \x01(\x0b\x32\x17.ha.irrigation.Location\x12\"\n\x05zones\x18\x02 \x03(\x0b\x32\x13.ha.irrigation.Zone\x12\x15\n\rauto_schedule\x18\x03 \x01(\x08\x12\x33\n\x10watering_windows\x18\x04 \x03(\x0b\x32\x19.ha.irrigation.TimeWindow\x12\x1b\n\x13min_water_amount_mm\x18\x05 \x01(\x02\x12\x35\n\ncontroller\x18\x06 \x01(\x0b\x32!.ha.irrigation.ControllerSettings\x12&\n\x05kafka\x18\x07 \x01(\x0b\x32\x17.ha.irrigation.Endpoint\x12\x33\n\x12irrigation_service\x18\x08 \x01(\x0b\x32\x17.ha.irrigation.Endpoint\x12\x33\n\x12\x63ontroller_service\x18\t \x01(\x0b\x32\x17.ha.irrigation.Endpoint\".\n\x08ZoneList\x12\"\n\x05zones\x18\x01 \x03(\x0b\x32\x13.ha.irrigation.Zone\".\n\x08TaskList\x12\"\n\x05tasks\x18\x01 \x03(\x0b\x32\x13.ha.irrigation.Task\"c\n\x04Task\x12\x0f\n\x07zone_id\x18\x01 \x01(\x05\x12+\n\x08\x64uration\x18\x02 \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x1d\n\x02\x62y\x18\x03 \x01(\x0e\x32\x11.ha.irrigation.By\"@\n\x1bGetWaterLevelHistoryRequest\x12\x0f\n\x07zone_id\x18\x01 \x01(\x05\x12\x10\n\x08max_days\x18\x02 \x01(\x05\"O\n\x1cGetWaterLevelHistoryResponse\x12/\n\x0cwater_levels\x18\x01 \x03(\x0b\x32\x19.ha.irrigation.WaterLevel\"%\n\x10GetAlertsRequest\x12\x11\n\tmax_count\x18\x01 \x01(\x05\"9\n\x11GetAlertsResponse\x12$\n\x06\x61lerts\x18\x01 \x03(\x0b\x32\x14.ha.irrigation.Alert\"D\n\x13\x44ismissAlertRequest\x12-\n\ttimestamp\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"\xc3\x01\n\tZoneEvent\x12-\n\ttimestamp\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0f\n\x07zone_id\x18\x02 \x01(\x05\x12/\n\x06\x61\x63tion\x18\x03 \x01(\x0e\x32\x1f.ha.irrigation.ZoneEvent.Action\x12\x1d\n\x02\x62y\x18\x04 \x01(\x0e\x32\x11.ha.irrigation.By\"&\n\x06\x41\x63tion\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x07\n\x03OFF\x10\x01\x12\x06\n\x02ON\x10\x02\"q\n\x15WaterLevelChangeEvent\x12-\n\ttimestamp\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0f\n\x07zone_id\x18\x02 \x01(\x05\x12\x18\n\x10\x63hange_amount_mm\x18\x03 \x01(\x02\"k\n\x0fWaterLevelEvent\x12,\n\x08timeslot\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0f\n\x07zone_id\x18\x02 \x01(\x05\x12\x19\n\x11\x63urrent_amount_mm\x18\x03 \x01(\x02**\n\x02\x42y\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x08\n\x04USER\x10\x01\x12\r\n\tSCHEDULER\x10\x02\x32\xbb\x06\n\x11IrrigationService\x12<\n\tGetConfig\x12\x16.google.protobuf.Empty\x1a\x15.ha.irrigation.Config\"\x00\x12P\n\tGetAlerts\x12\x1f.ha.irrigation.GetAlertsRequest\x1a .ha.irrigation.GetAlertsResponse\"\x00\x12L\n\x0c\x44ismissAlert\x12\".ha.irrigation.DismissAlertRequest\x1a\x16.google.protobuf.Empty\"\x00\x12@\n\x0bGetAllZones\x12\x16.google.protobuf.Empty\x1a\x17.ha.irrigation.ZoneList\"\x00\x12\x39\n\x08SaveZone\x12\x13.ha.irrigation.Zone\x1a\x16.google.protobuf.Empty\"\x00\x12q\n\x14GetWaterLevelHistory\x12*.ha.irrigation.GetWaterLevelHistoryRequest\x1a+.ha.irrigation.GetWaterLevelHistoryResponse\"\x00\x12@\n\x0bSubmitTasks\x12\x17.ha.irrigation.TaskList\x1a\x16.google.protobuf.Empty\"\x00\x12?\n\x0eGetCurrentTask\x12\x16.google.protobuf.Empty\x1a\x13.ha.irrigation.Task\"\x00\x12\x44\n\x0fGetPendingTasks\x12\x16.google.protobuf.Empty\x1a\x17.ha.irrigation.TaskList\"\x00\x12\x46\n\x12\x45nableAutoSchedule\x12\x16.google.protobuf.Empty\x1a\x16.google.protobuf.Empty\"\x00\x12G\n\x13\x44isableAutoSchedule\x12\x16.google.protobuf.Empty\x1a\x16.google.protobuf.Empty\"\x00\x32\x85\x01\n\x11\x43ontrollerService\x12\x36\n\x05Start\x12\x13.ha.irrigation.Task\x1a\x16.google.protobuf.Empty\"\x00\x12\x38\n\x04Stop\x12\x16.google.protobuf.Empty\x1a\x16.google.protobuf.Empty\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\x10irrigation.proto\x12\rha.irrigation\x1a\x1egoogle/protobuf/duration.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x81\x01\n\x04Zone\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0b\n\x03pin\x18\x03 \x01(\r\x12\x16\n\x0e\x66low_rate_mmpm\x18\x04 \x01(\x02\x12\x1b\n\x13max_water_amount_mm\x18\x05 \x01(\x02\x12\x1d\n\x15\x65vaporation_rate_mmpm\x18\x06 \x01(\x02\"\x8a\x01\n\x03Run\x12\x0f\n\x07zone_id\x18\x01 \x01(\x05\x12,\n\x08start_at\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12+\n\x07stop_at\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x17\n\x0fwater_amount_mm\x18\x04 \x01(\x02\"\x80\x01\n\nWaterLevel\x12,\n\x08timeslot\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0f\n\x07zone_id\x18\x02 \x01(\x05\x12\x18\n\x10\x63hange_amount_mm\x18\x03 \x01(\x02\x12\x19\n\x11\x63urrent_amount_mm\x18\x04 \x01(\x02\"G\n\x05\x41lert\x12-\n\ttimestamp\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0f\n\x07message\x18\x02 \x01(\t\"q\n\x08Location\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0f\n\x07\x61\x64\x64ress\x18\x02 \x01(\t\x12\x0c\n\x04\x63ity\x18\x03 \x01(\t\x12\r\n\x05state\x18\x04 \x01(\t\x12\x0f\n\x07zipcode\x18\x05 \x01(\t\x12\x0b\n\x03lat\x18\x06 \x01(\x02\x12\x0b\n\x03lon\x18\x07 \x01(\x02\"&\n\x08\x45ndpoint\x12\x0c\n\x04host\x18\x01 \x01(\t\x12\x0c\n\x04port\x18\x02 \x01(\x05\"0\n\nTimeWindow\x12\x11\n\tfrom_hour\x18\x01 \x01(\r\x12\x0f\n\x07to_hour\x18\x02 \x01(\r\"n\n\x12\x43ontrollerSettings\x12\x36\n\x13no_watering_windows\x18\x01 \x03(\x0b\x32\x19.ha.irrigation.TimeWindow\x12 \n\x18max_running_secs_per_day\x18\x02 \x01(\x05\"\xb3\x03\n\x06\x43onfig\x12)\n\x08location\x18\x01 \x01(\x0b\x32\x17.ha.irrigation.Location\x12\"\n\x05zones\x18\x02 \x03(\x0b\x32\x13.ha.irrigation.Zone\x12\x15\n\rauto_schedule\x18\x03 \x01(\x08\x12\x33\n\x10watering_windows\x18\x04 \x03(\x0b\x32\x19.ha.irrigation.TimeWindow\x12\x1b\n\x13min_water_amount_mm\x18\x05 \x01(\x02\x12\x35\n\ncontroller\x18\x06 \x01(\x0b\x32!.ha.irrigation.ControllerSettings\x12&\n\x05kafka\x18\x07 \x01(\x0b\x32\x17.ha.irrigation.Endpoint\x12(\n\x07mongodb\x18\x08 \x01(\x0b\x32\x17.ha.irrigation.Endpoint\x12\x33\n\x12irrigation_service\x18\t \x01(\x0b\x32\x17.ha.irrigation.Endpoint\x12\x33\n\x12\x63ontroller_service\x18\n \x01(\x0b\x32\x17.ha.irrigation.Endpoint\".\n\x08ZoneList\x12\"\n\x05zones\x18\x01 \x03(\x0b\x32\x13.ha.irrigation.Zone\".\n\x08TaskList\x12\"\n\x05tasks\x18\x01 \x03(\x0b\x32\x13.ha.irrigation.Task\"c\n\x04Task\x12\x0f\n\x07zone_id\x18\x01 \x01(\x05\x12+\n\x08\x64uration\x18\x02 \x01(\x0b\x32\x19.google.protobuf.Duration\x12\x1d\n\x02\x62y\x18\x03 \x01(\x0e\x32\x11.ha.irrigation.By\"@\n\x1bGetWaterLevelHistoryRequest\x12\x0f\n\x07zone_id\x18\x01 \x01(\x05\x12\x10\n\x08max_days\x18\x02 \x01(\x05\"O\n\x1cGetWaterLevelHistoryResponse\x12/\n\x0cwater_levels\x18\x01 \x03(\x0b\x32\x19.ha.irrigation.WaterLevel\"%\n\x10GetAlertsRequest\x12\x11\n\tmax_count\x18\x01 \x01(\x05\"9\n\x11GetAlertsResponse\x12$\n\x06\x61lerts\x18\x01 \x03(\x0b\x32\x14.ha.irrigation.Alert\"D\n\x13\x44ismissAlertRequest\x12-\n\ttimestamp\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"\xc3\x01\n\tZoneEvent\x12-\n\ttimestamp\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0f\n\x07zone_id\x18\x02 \x01(\x05\x12/\n\x06\x61\x63tion\x18\x03 \x01(\x0e\x32\x1f.ha.irrigation.ZoneEvent.Action\x12\x1d\n\x02\x62y\x18\x04 \x01(\x0e\x32\x11.ha.irrigation.By\"&\n\x06\x41\x63tion\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x07\n\x03OFF\x10\x01\x12\x06\n\x02ON\x10\x02\"q\n\x15WaterLevelChangeEvent\x12-\n\ttimestamp\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0f\n\x07zone_id\x18\x02 \x01(\x05\x12\x18\n\x10\x63hange_amount_mm\x18\x03 \x01(\x02\"k\n\x0fWaterLevelEvent\x12,\n\x08timeslot\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0f\n\x07zone_id\x18\x02 \x01(\x05\x12\x19\n\x11\x63urrent_amount_mm\x18\x03 \x01(\x02**\n\x02\x42y\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x08\n\x04USER\x10\x01\x12\r\n\tSCHEDULER\x10\x02\x32\xbb\x06\n\x11IrrigationService\x12<\n\tGetConfig\x12\x16.google.protobuf.Empty\x1a\x15.ha.irrigation.Config\"\x00\x12P\n\tGetAlerts\x12\x1f.ha.irrigation.GetAlertsRequest\x1a .ha.irrigation.GetAlertsResponse\"\x00\x12L\n\x0c\x44ismissAlert\x12\".ha.irrigation.DismissAlertRequest\x1a\x16.google.protobuf.Empty\"\x00\x12@\n\x0bGetAllZones\x12\x16.google.protobuf.Empty\x1a\x17.ha.irrigation.ZoneList\"\x00\x12\x39\n\x08SaveZone\x12\x13.ha.irrigation.Zone\x1a\x16.google.protobuf.Empty\"\x00\x12q\n\x14GetWaterLevelHistory\x12*.ha.irrigation.GetWaterLevelHistoryRequest\x1a+.ha.irrigation.GetWaterLevelHistoryResponse\"\x00\x12@\n\x0bSubmitTasks\x12\x17.ha.irrigation.TaskList\x1a\x16.google.protobuf.Empty\"\x00\x12?\n\x0eGetCurrentTask\x12\x16.google.protobuf.Empty\x1a\x13.ha.irrigation.Task\"\x00\x12\x44\n\x0fGetPendingTasks\x12\x16.google.protobuf.Empty\x1a\x17.ha.irrigation.TaskList\"\x00\x12\x46\n\x12\x45nableAutoSchedule\x12\x16.google.protobuf.Empty\x1a\x16.google.protobuf.Empty\"\x00\x12G\n\x13\x44isableAutoSchedule\x12\x16.google.protobuf.Empty\x1a\x16.google.protobuf.Empty\"\x00\x32\x85\x01\n\x11\x43ontrollerService\x12\x36\n\x05Start\x12\x13.ha.irrigation.Task\x1a\x16.google.protobuf.Empty\"\x00\x12\x38\n\x04Stop\x12\x16.google.protobuf.Empty\x1a\x16.google.protobuf.Empty\"\x00\x62\x06proto3'
   ,
   dependencies=[google_dot_protobuf_dot_duration__pb2.DESCRIPTOR,google_dot_protobuf_dot_empty__pb2.DESCRIPTOR,google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,])
 
@@ -47,8 +47,8 @@ _BY = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2112,
-  serialized_end=2154,
+  serialized_start=2295,
+  serialized_end=2337,
 )
 _sym_db.RegisterEnumDescriptor(_BY)
 
@@ -79,8 +79,8 @@ _ZONEEVENT_ACTION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1848,
-  serialized_end=1886,
+  serialized_start=2031,
+  serialized_end=2069,
 )
 _sym_db.RegisterEnumDescriptor(_ZONEEVENT_ACTION)
 
@@ -151,6 +151,58 @@ _ZONE = _descriptor.Descriptor(
 )
 
 
+_RUN = _descriptor.Descriptor(
+  name='Run',
+  full_name='ha.irrigation.Run',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='zone_id', full_name='ha.irrigation.Run.zone_id', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='start_at', full_name='ha.irrigation.Run.start_at', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='stop_at', full_name='ha.irrigation.Run.stop_at', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='water_amount_mm', full_name='ha.irrigation.Run.water_amount_mm', index=3,
+      number=4, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=262,
+  serialized_end=400,
+)
+
+
 _WATERLEVEL = _descriptor.Descriptor(
   name='WaterLevel',
   full_name='ha.irrigation.WaterLevel',
@@ -198,8 +250,8 @@ _WATERLEVEL = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=262,
-  serialized_end=390,
+  serialized_start=403,
+  serialized_end=531,
 )
 
 
@@ -236,8 +288,8 @@ _ALERT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=392,
-  serialized_end=463,
+  serialized_start=533,
+  serialized_end=604,
 )
 
 
@@ -309,8 +361,8 @@ _LOCATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=465,
-  serialized_end=578,
+  serialized_start=606,
+  serialized_end=719,
 )
 
 
@@ -347,8 +399,8 @@ _ENDPOINT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=580,
-  serialized_end=618,
+  serialized_start=721,
+  serialized_end=759,
 )
 
 
@@ -385,8 +437,8 @@ _TIMEWINDOW = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=620,
-  serialized_end=668,
+  serialized_start=761,
+  serialized_end=809,
 )
 
 
@@ -423,8 +475,8 @@ _CONTROLLERSETTINGS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=670,
-  serialized_end=780,
+  serialized_start=811,
+  serialized_end=921,
 )
 
 
@@ -485,15 +537,22 @@ _CONFIG = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='irrigation_service', full_name='ha.irrigation.Config.irrigation_service', index=7,
+      name='mongodb', full_name='ha.irrigation.Config.mongodb', index=7,
       number=8, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='controller_service', full_name='ha.irrigation.Config.controller_service', index=8,
+      name='irrigation_service', full_name='ha.irrigation.Config.irrigation_service', index=8,
       number=9, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='controller_service', full_name='ha.irrigation.Config.controller_service', index=9,
+      number=10, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -510,8 +569,8 @@ _CONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=783,
-  serialized_end=1176,
+  serialized_start=924,
+  serialized_end=1359,
 )
 
 
@@ -541,8 +600,8 @@ _ZONELIST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1178,
-  serialized_end=1224,
+  serialized_start=1361,
+  serialized_end=1407,
 )
 
 
@@ -572,8 +631,8 @@ _TASKLIST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1226,
-  serialized_end=1272,
+  serialized_start=1409,
+  serialized_end=1455,
 )
 
 
@@ -617,8 +676,8 @@ _TASK = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1274,
-  serialized_end=1373,
+  serialized_start=1457,
+  serialized_end=1556,
 )
 
 
@@ -655,8 +714,8 @@ _GETWATERLEVELHISTORYREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1375,
-  serialized_end=1439,
+  serialized_start=1558,
+  serialized_end=1622,
 )
 
 
@@ -686,8 +745,8 @@ _GETWATERLEVELHISTORYRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1441,
-  serialized_end=1520,
+  serialized_start=1624,
+  serialized_end=1703,
 )
 
 
@@ -717,8 +776,8 @@ _GETALERTSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1522,
-  serialized_end=1559,
+  serialized_start=1705,
+  serialized_end=1742,
 )
 
 
@@ -748,8 +807,8 @@ _GETALERTSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1561,
-  serialized_end=1618,
+  serialized_start=1744,
+  serialized_end=1801,
 )
 
 
@@ -779,8 +838,8 @@ _DISMISSALERTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1620,
-  serialized_end=1688,
+  serialized_start=1803,
+  serialized_end=1871,
 )
 
 
@@ -832,8 +891,8 @@ _ZONEEVENT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1691,
-  serialized_end=1886,
+  serialized_start=1874,
+  serialized_end=2069,
 )
 
 
@@ -877,8 +936,8 @@ _WATERLEVELCHANGEEVENT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1888,
-  serialized_end=2001,
+  serialized_start=2071,
+  serialized_end=2184,
 )
 
 
@@ -922,10 +981,12 @@ _WATERLEVELEVENT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2003,
-  serialized_end=2110,
+  serialized_start=2186,
+  serialized_end=2293,
 )
 
+_RUN.fields_by_name['start_at'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
+_RUN.fields_by_name['stop_at'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 _WATERLEVEL.fields_by_name['timeslot'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 _ALERT.fields_by_name['timestamp'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 _CONTROLLERSETTINGS.fields_by_name['no_watering_windows'].message_type = _TIMEWINDOW
@@ -934,6 +995,7 @@ _CONFIG.fields_by_name['zones'].message_type = _ZONE
 _CONFIG.fields_by_name['watering_windows'].message_type = _TIMEWINDOW
 _CONFIG.fields_by_name['controller'].message_type = _CONTROLLERSETTINGS
 _CONFIG.fields_by_name['kafka'].message_type = _ENDPOINT
+_CONFIG.fields_by_name['mongodb'].message_type = _ENDPOINT
 _CONFIG.fields_by_name['irrigation_service'].message_type = _ENDPOINT
 _CONFIG.fields_by_name['controller_service'].message_type = _ENDPOINT
 _ZONELIST.fields_by_name['zones'].message_type = _ZONE
@@ -950,6 +1012,7 @@ _ZONEEVENT_ACTION.containing_type = _ZONEEVENT
 _WATERLEVELCHANGEEVENT.fields_by_name['timestamp'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 _WATERLEVELEVENT.fields_by_name['timeslot'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 DESCRIPTOR.message_types_by_name['Zone'] = _ZONE
+DESCRIPTOR.message_types_by_name['Run'] = _RUN
 DESCRIPTOR.message_types_by_name['WaterLevel'] = _WATERLEVEL
 DESCRIPTOR.message_types_by_name['Alert'] = _ALERT
 DESCRIPTOR.message_types_by_name['Location'] = _LOCATION
@@ -977,6 +1040,13 @@ Zone = _reflection.GeneratedProtocolMessageType('Zone', (_message.Message,), {
   # @@protoc_insertion_point(class_scope:ha.irrigation.Zone)
   })
 _sym_db.RegisterMessage(Zone)
+
+Run = _reflection.GeneratedProtocolMessageType('Run', (_message.Message,), {
+  'DESCRIPTOR' : _RUN,
+  '__module__' : 'irrigation_pb2'
+  # @@protoc_insertion_point(class_scope:ha.irrigation.Run)
+  })
+_sym_db.RegisterMessage(Run)
 
 WaterLevel = _reflection.GeneratedProtocolMessageType('WaterLevel', (_message.Message,), {
   'DESCRIPTOR' : _WATERLEVEL,
@@ -1112,8 +1182,8 @@ _IRRIGATIONSERVICE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=2157,
-  serialized_end=2984,
+  serialized_start=2340,
+  serialized_end=3167,
   methods=[
   _descriptor.MethodDescriptor(
     name='GetConfig',
@@ -1226,8 +1296,8 @@ _CONTROLLERSERVICE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=1,
   serialized_options=None,
-  serialized_start=2987,
-  serialized_end=3120,
+  serialized_start=3170,
+  serialized_end=3303,
   methods=[
   _descriptor.MethodDescriptor(
     name='Start',
