@@ -1,5 +1,19 @@
 <template>
-  <v-container>
+  <v-container class="pt-0">
+    <v-row>
+      <v-col cols="12" class="pa-0">
+        <div
+          class="alert px-2 py-1"
+          v-for="alert in alerts"
+          :key="alert.getTimestamp().toDate().getTime()"
+        >
+          {{ formatTimestamp(alert.getTimestamp().toDate()) }}: {{ alert.getMessage() }}
+          <v-btn fab x-small @click="dismissAlert(alert)">
+            <v-icon x-small>mdi-close</v-icon>
+          </v-btn>
+        </div>
+      </v-col>
+    </v-row>
     <v-row>
       <v-col cols="12">
         <rain-dash :weather-service="weatherService"></rain-dash>
@@ -87,6 +101,7 @@ module.exports = {
     zones: [],
     tasks: [],
     currentTask: {},
+    alerts: [],
     showNotification: false,
     notificationText: ""
   }),
@@ -105,6 +120,7 @@ module.exports = {
     );
     this.refreshZones();
     this.refreshTasks();
+    this.refreshAlerts();
   },
   computed: {
     availableZones() {
@@ -150,6 +166,17 @@ module.exports = {
           }
         }
       );
+    },
+    refreshAlerts() {
+      const request = new proto.ha.irrigation.GetAlertsRequest();
+      request.setMaxCount = 10;
+      this.irrigationService.getAlerts(request, {}, (err, response) => {
+        if (response) {
+          this.alerts = response.getAlertsList();
+        } else {
+          this.alerts = [];
+        }
+      });
     },
     getZone(zoneId) {
       return this.zones.find(x => x.id === zoneId);
@@ -227,11 +254,25 @@ module.exports = {
           });
         })
         .catch(() => {});
+    },
+    formatTimestamp(timestamp) {
+      return moment(timestamp).format("YYYY-MM-DD hh:mm:ss");
+    },
+    dismissAlert(alert) {
+      const request = new proto.ha.irrigation.DismissAlertRequest();
+      request.setTimestamp(alert.getTimestamp());
+      this.irrigationService.dismissAlert(request, {}, (err, response) => {
+        this.refreshAlerts();
+      });
     }
   }
 };
 </script>
 <style scoped>
+.alert {
+  background-color: darkred;
+  color: white;
+}
 .active {
   border: solid 2px #43a047;
 }

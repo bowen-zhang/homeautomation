@@ -8,59 +8,68 @@
 <script>
 module.exports = {
   props: ["managementClient", "zone"],
-  data: () => ({
-    options: {
-      chart: {
-        height: 100,
-        toolbar: {
-          show: false
-        }
-      },
-      title: {
-        text: ""
-      },
-      dataLabels: {
-        enabled: false
-      },
-      markers: {
-        size: 0
-      },
-      xaxis: {
-        type: "datetime",
-        labels: {
-          format: "MM/dd HH:mm"
-        },
-        tooltip: {
-          formatter: (val, opts) => {
-            return moment(val).format("MMM Do h:mm");
+  data() {
+    return {
+      options: {
+        chart: {
+          height: 100,
+          toolbar: {
+            show: false
           }
-        }
-      },
-      yaxis: [
-        {
-          title: {
-            text: "Amount (mm)"
-          },
+        },
+        title: {
+          text: ""
+        },
+        dataLabels: {
+          enabled: false
+        },
+        markers: {
+          size: 0
+        },
+        xaxis: {
+          type: "datetime",
           labels: {
-            formatter(val) {
-              return val.toFixed(2);
+            format: "MM/dd HH:mm"
+          },
+          tooltip: {
+            formatter: (val, opts) => {
+              return moment(val).format("MMM Do h:mm");
             }
           }
-        }
-      ],
-      annotations: {
+        },
         yaxis: [
           {
-            y: 0,
-            label: {
-              text: "Max water level"
+            min: 0,
+            max: max => {
+              return Math.ceil(
+                Math.max(max, this.zone ? this.zone.maxWaterAmountMm : 0)
+              );
+            },
+            tickAmount: 10,
+            title: {
+              text: "Amount (mm)"
+            },
+            labels: {
+              formatter(val) {
+                return val.toFixed(1);
+              }
             }
           }
-        ]
-      }
-    },
-    series: []
-  }),
+        ],
+        annotations: {
+          yaxis: [
+            {
+              y: 0,
+              label: {
+                text: "Max water level"
+              }
+            }
+          ]
+        }
+      },
+      series: []
+    };
+  },
   created() {
     this.load();
   },
