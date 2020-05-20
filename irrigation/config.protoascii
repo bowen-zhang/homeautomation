@@ -36,6 +36,6 @@ irrigation_service {
   port: 17052
 }
 controller_service {
-  host: "localhost"
+  host: "irrigation"
   port: 17051
 }
