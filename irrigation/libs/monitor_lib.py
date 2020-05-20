@@ -4,6 +4,7 @@ import time
 from google.protobuf import empty_pb2
 
 from shared import topics
+from irrigation.libs import utils
 from irrigation.proto import irrigation_pb2
 from irrigation.proto import irrigation_pb2_grpc
 from third_party.common import kafka_util
@@ -141,8 +142,8 @@ class WaterLevelChangeMonitor(kafka_util.EventConsumer):
     current_timeslot = _timestamp_to_timeslot(self._context.clock.now())
     change_timeslot = _timestamp_to_timeslot(event.timestamp.ToDatetime())
     if change_timeslot > current_timeslot:
-      raise kafka_util.EventConsumerException(
-          'Water level change shall not happen in future time: {0}.'.format(event))
+      raise kafka_util.EventConsumerException('Water level change shall not happen in future time.' +
+                                              ' current timeslot={0}, change timeslot={1}.'.format(current_timeslot, change_timeslot))
 
     zone = self._context.storage.zones.find_one({'id': event.zone_id})
     if not zone:
@@ -240,14 +241,26 @@ class WaterLevelMonitor(pattern.Worker):
         irrigation_pb2_grpc.IrrigationServiceStub,
         self._context.config.irrigation_service)
 
+    self._enabled = True
+    self._context.watch_config('/ha/irrigation/auto_schedule',
+                               default_value=True,
+                               callback=self._on_auto_schedule_change)
+
+  def _on_auto_schedule_change(self, new_value, old_value):
+    self._enabled = new_value
+    self.logger.info('Turn {0} auto scheduler.'.format(
+        'on' if new_value else 'off'))
+
   def _on_run(self):
     if not self._should_run():
       return
 
     water_level = self._get_lowest_water_level()
     if not water_level:
+      self.logger.info('No run: no water level data.')
       return
     if water_level.current_amount_mm > self._context.config.min_water_amount_mm:
+      self.logger.info('No run: all above minimum water amount.')
       return
 
     zone = self._context.storage.zones.find_one({'id': water_level.zone_id})
@@ -264,19 +277,24 @@ class WaterLevelMonitor(pattern.Worker):
 
     self.logger.info('Scheduling zone {0} to run {1:.1f} minutes...'.format(
         task.zone_id, duration_sec/60))
-    self._irrigation_service.SubmitTasks([task])
+    self._irrigation_service.SubmitTasks(task_list)
 
   def _should_run(self):
+    # Don't run if disabled
+    if not self._enabled:
+      self.logger.info('No run: disabled.')
+      return False
+
     # Don't run if out of watering window.
     now = self._context.clock.now()
-    windows = [x for x in self._context.config.watering_windows if x.from_hour <=
-               now.hour and now.hour < x.to_hour]
-    if not windows:
+    if not utils.is_in_any_time_window(now, self._context.config.watering_windows):
+      self.logger.info('No run: out of watering window.')
       return False
 
     # Don't run if there's pending tasks.
     task_list = self._irrigation_service.GetPendingTasks(empty_pb2.Empty())
     if task_list.tasks:
+      self.logger.info('No run: has pending tasks.')
       return False
 
     return True

@@ -27,6 +27,8 @@
         <v-card>
           <v-toolbar dense flat dark color="green darken-3">
             <v-toolbar-title>Schedule</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-switch v-model="autoSchedule" inset label="Auto" hide-details></v-switch>
           </v-toolbar>
           <v-card-text>
             <v-list two-line>
@@ -98,6 +100,7 @@ module.exports = {
     irrigationService: null,
     irrigationService: null,
     weatherService: null,
+    autoSchedule: null,
     zones: [],
     tasks: [],
     currentTask: {},
@@ -121,12 +124,34 @@ module.exports = {
     this.refreshZones();
     this.refreshTasks();
     this.refreshAlerts();
+    this.irrigationService.getAutoSchedule(
+      new proto.google.protobuf.Empty(),
+      {},
+      (err, response) => {
+        if (response) {
+          this.autoSchedule = response.getEnabled();
+        }
+      }
+    );
   },
   computed: {
     availableZones() {
       return this.zones.filter(
         zone => this.tasks.find(t => t.zoneId == zone.id) === undefined
       );
+    }
+  },
+  watch: {
+    autoSchedule(newVal) {
+      request = new proto.ha.irrigation.AutoScheduleStatus();
+      request.setEnabled(newVal);
+      this.irrigationService.setAutoSchedule(request, {}, (err, response) => {
+        if (response) {
+          this.notify(`Auto schedule is turned ${newVal ? "on" : "off"}`);
+        } else {
+          this.notify("Failed to change auto schedule settings.");
+        }
+      });
     }
   },
   methods: {
@@ -207,13 +232,16 @@ module.exports = {
       });
       this.irrigationService.submitTasks(tasksToStart, {}, (err, response) => {
         if (response) {
-          this.notificationText = "Task is submitted.";
+          this.notify("Task is submitted.");
           setTimeout(this.refreshTasks, 1000);
         } else {
-          this.notificationText = "Failed to submit task.";
+          this.notify("Failed to submit task.");
         }
-        this.showNotification = true;
       });
+    },
+    notify(msg) {
+      this.notificationText = msg;
+      this.showNotification = true;
     },
     clear() {
       this.tasks = [];
@@ -222,10 +250,10 @@ module.exports = {
         {},
         (err, response) => {
           if (response) {
-            this.notificationText = "All tasks are cancelled.";
+            this.notify("All tasks are cancelled.");
             setTimeout(this.refreshTasks, 1000);
           } else {
-            this.notificationText = "Failed to cancel tasks.";
+            this.notify("Failed to cancel tasks.");
           }
           this.showNotification = true;
         }
@@ -245,12 +273,11 @@ module.exports = {
             .setEvaporationRateMmpm(updatedZone.evaporationRateMmpm);
           this.irrigationService.saveZone(updatedZone, {}, (err, response) => {
             if (response) {
-              this.notificationText = "Zone is saved.";
+              this.notify("Zone is saved.");
               this.refreshZones();
             } else {
-              this.notificationText = "Failed to save zone.";
+              this.notify("Failed to save zone.");
             }
-            this.showNotification = true;
           });
         })
         .catch(() => {});

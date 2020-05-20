@@ -60,15 +60,15 @@ class IrrigationServiceStub(object):
         request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
         response_deserializer=irrigation__pb2.TaskList.FromString,
         )
-    self.EnableAutoSchedule = channel.unary_unary(
-        '/ha.irrigation.IrrigationService/EnableAutoSchedule',
-        request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+    self.SetAutoSchedule = channel.unary_unary(
+        '/ha.irrigation.IrrigationService/SetAutoSchedule',
+        request_serializer=irrigation__pb2.AutoScheduleStatus.SerializeToString,
         response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
         )
-    self.DisableAutoSchedule = channel.unary_unary(
-        '/ha.irrigation.IrrigationService/DisableAutoSchedule',
+    self.GetAutoSchedule = channel.unary_unary(
+        '/ha.irrigation.IrrigationService/GetAutoSchedule',
         request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
-        response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+        response_deserializer=irrigation__pb2.AutoScheduleStatus.FromString,
         )
 
 
@@ -139,14 +139,14 @@ class IrrigationServiceServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
-  def EnableAutoSchedule(self, request, context):
+  def SetAutoSchedule(self, request, context):
     # missing associated documentation comment in .proto file
     pass
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
-  def DisableAutoSchedule(self, request, context):
+  def GetAutoSchedule(self, request, context):
     # missing associated documentation comment in .proto file
     pass
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -201,15 +201,15 @@ def add_IrrigationServiceServicer_to_server(servicer, server):
           request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
           response_serializer=irrigation__pb2.TaskList.SerializeToString,
       ),
-      'EnableAutoSchedule': grpc.unary_unary_rpc_method_handler(
-          servicer.EnableAutoSchedule,
-          request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+      'SetAutoSchedule': grpc.unary_unary_rpc_method_handler(
+          servicer.SetAutoSchedule,
+          request_deserializer=irrigation__pb2.AutoScheduleStatus.FromString,
           response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
       ),
-      'DisableAutoSchedule': grpc.unary_unary_rpc_method_handler(
-          servicer.DisableAutoSchedule,
+      'GetAutoSchedule': grpc.unary_unary_rpc_method_handler(
+          servicer.GetAutoSchedule,
           request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
-          response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+          response_serializer=irrigation__pb2.AutoScheduleStatus.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(

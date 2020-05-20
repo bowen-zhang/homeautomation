@@ -7,22 +7,25 @@ location {
   lat: 47.595876
   lon: -122.20155
 }
-auto_schedule: true
 watering_windows: {
-  from_hour: 5
-  to_hour: 7
+  from_hour: 12
+  to_hour: 16
 }
 watering_windows: {
-  from_hour: 4
-  to_hour: 6
+  from_hour: 23
+  to_hour: 1
 }
 min_water_amount_mm: 0.3
 controller: {
   no_watering_windows: {
-    from_hour: 21
-    to_hour: 4
+    from_hour: 4
+    to_hour: 11
   }
   max_running_secs_per_day: 3600
+}
+zookeeper {
+  host: "server"
+  port: 2181
 }
 kafka {
   host: "server"

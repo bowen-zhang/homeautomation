@@ -3,6 +3,7 @@ import threading
 from google.protobuf import empty_pb2
 
 from shared import topics
+from irrigation.libs import utils
 from irrigation.libs import zone_lib
 from irrigation.proto import irrigation_pb2
 from irrigation.proto import irrigation_pb2_grpc
@@ -129,15 +130,7 @@ class Controller(pattern.Worker):
 
   def _is_valid_time_to_run(self):
     now = self._context.clock.now()
-    for window in self._context.config.controller.no_watering_windows:
-      if window.from_hour < window.to_hour:
-        if now.hour >= window.from_hour and now.hour < window.to_hour:
-          return False
-      else:
-        if now.hour >= window.from_hour or now.hour < window.to_hour:
-          return False
-
-    return True
+    return not utils.is_in_any_time_window(now, self._context.config.controller.no_watering_windows)
 
   def _is_watering_too_much(self, task):
     total = self._total_duration_secs.get(task.zone_id, 0)

@@ -9,9 +9,10 @@ from irrigation.libs import storage_lib
 from shared import context_lib
 from third_party.common import pattern
 from third_party.common import time_util
+from third_party.common.context import zookeeper_mixin
 
 
-class Context(context_lib.Context):
+class Context(context_lib.Context, zookeeper_mixin.Context):
   def __init__(self, config=None, livemode=True, clock=None, storage=None, *args, **kwargs):
     if livemode:
       clock = time_util.RealWorldClock()
@@ -23,8 +24,14 @@ class Context(context_lib.Context):
           client=mongomock.MongoClient(),
           database_name='irrigation_test')
 
-    super().__init__(config=config, livemode=livemode, storage=storage, clock=clock,
-                     kafka_endpoint=config.kafka, *args, **kwargs)
+    super().__init__(config=config,
+                     livemode=livemode,
+                     storage=storage,
+                     clock=clock,
+                     kafka_endpoint=config.kafka,
+                     zookeeper_host='{0}:{1}'.format(
+                         config.zookeeper.host, config.zookeeper.port),
+                     *args, **kwargs)
 
     self._zone_ids = None
 

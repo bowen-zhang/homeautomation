@@ -64,12 +64,11 @@ message ControllerSettings {
 
 message Config {
 	Location location = 1;
-	repeated Zone zones = 2;
-  bool auto_schedule = 3;
   repeated TimeWindow watering_windows = 4;
   float min_water_amount_mm = 5;
   ControllerSettings controller = 6;
-  Endpoint kafka = 7;
+  Endpoint zookeeper = 7;
+  Endpoint kafka = 8;
   Endpoint irrigation_service = 9;
   Endpoint controller_service = 10;
 }
@@ -101,6 +100,7 @@ message GetWaterLevelHistoryRequest {
 
 message GetWaterLevelHistoryResponse {
   repeated WaterLevel water_levels = 1;
+  repeated Run runs = 2;
 }
 
 message GetAlertsRequest {
@@ -113,6 +113,10 @@ message GetAlertsResponse {
 
 message DismissAlertRequest {
   google.protobuf.Timestamp timestamp = 1;
+}
+
+message AutoScheduleStatus {
+  bool enabled = 1;
 }
 
 service IrrigationService {
@@ -130,8 +134,8 @@ service IrrigationService {
   rpc GetCurrentTask(google.protobuf.Empty) returns (Task) {}
   rpc GetPendingTasks(google.protobuf.Empty) returns (TaskList) {}
 
-  rpc EnableAutoSchedule(google.protobuf.Empty) returns (google.protobuf.Empty) {}
-  rpc DisableAutoSchedule(google.protobuf.Empty) returns (google.protobuf.Empty) {}
+  rpc SetAutoSchedule(AutoScheduleStatus) returns (google.protobuf.Empty) {}
+  rpc GetAutoSchedule(google.protobuf.Empty) returns (AutoScheduleStatus) {}
 }
 
 service ControllerService {

@@ -11,14 +11,54 @@ module.exports = {
   data() {
     return {
       options: {
+        xaxis: {
+          type: "datetime"
+        }
+      },
+      series: []
+    };
+  },
+  created() {
+    this.load();
+  },
+  methods: {
+    load() {
+      const request = new proto.ha.irrigation.GetWaterLevelHistoryRequest();
+      request.setZoneId(this.zone.id);
+      request.setMaxDays(3);
+      this.managementClient.getWaterLevelHistory(
+        request,
+        {},
+        (err, response) => {
+          this.onLoad(response);
+        }
+      );
+    },
+    onLoad(response) {
+      const waterLevels = response.getWaterLevelsList();
+      this.options = this.getOptions(response);
+      this.series = [
+        {
+          name: this.zone.name,
+          type: "area",
+          data: waterLevels.map(x => [
+            x.getTimeslot().toDate(),
+            x.getCurrentAmountMm()
+          ])
+        }
+      ];
+    },
+    getOptions(response) {
+      const runs = response.getRunsList();
+      const options = {
         chart: {
-          height: 100,
+          height: 200,
           toolbar: {
             show: false
           }
         },
         title: {
-          text: ""
+          text: this.zone.name
         },
         dataLabels: {
           enabled: false
@@ -41,9 +81,7 @@ module.exports = {
           {
             min: 0,
             max: max => {
-              return Math.ceil(
-                Math.max(max, this.zone ? this.zone.maxWaterAmountMm : 0)
-              );
+              return Math.ceil(Math.max(max, this.zone.maxWaterAmountMm));
             },
             tickAmount: 10,
             title: {
@@ -59,48 +97,40 @@ module.exports = {
         annotations: {
           yaxis: [
             {
-              y: 0,
+              y: this.zone.maxWaterAmountMm,
               label: {
                 text: "Max water level"
               }
             }
           ]
         }
-      },
-      series: []
-    };
-  },
-  created() {
-    this.load();
-  },
-  methods: {
-    load() {
-      this.options.title.text = this.zone.name;
-      this.options.annotations.yaxis[0].y = this.zone.maxWaterAmountMm;
-
-      const request = new proto.ha.irrigation.GetWaterLevelHistoryRequest();
-      request.setZoneId(this.zone.id);
-      request.setMaxDays(3);
-      this.managementClient.getWaterLevelHistory(
-        request,
-        {},
-        (err, response) => {
-          this.onLoad(response);
-        }
-      );
-    },
-    onLoad(response) {
-      const waterLevels = response.getWaterLevelsList();
-      this.series = [
+      };
+      options.annotations.xaxis = [
         {
-          name: this.zone.name,
-          type: "area",
-          data: waterLevels.map(x => [
-            x.getTimeslot().toDate(),
-            x.getCurrentAmountMm()
-          ])
+          x: new Date("5/19/2020 00:00:00").getTime(),
+          x2: new Date("5/19/2020 00:10:00").getTime(),
+          label: {
+            text: "Test"
+          }
         }
       ];
+      options.annotations.xaxis = runs.map(run => ({
+        x: run
+          .getStartAt()
+          .toDate()
+          .getTime(),
+        x2: run
+          .getStopAt()
+          .toDate()
+          .getTime(),
+        fillColor: "#B3F7CA",
+        label: {
+          text: "Irrigation",
+          position: "bottom",
+          offsetY: 20
+        }
+      }));
+      return options;
     }
   }
 };

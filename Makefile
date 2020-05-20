@@ -23,7 +23,7 @@ build-proto:
 watch-kafka:
 	PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION='python' PYTHONPATH=$(CURDIR) python3 tools/kafka_watcher.py
 
-dashboard:
+dashboard-all:
 	docker build -t dashboard/envoy:v2 -f dashboard-envoy.dockerfile .
 	docker build -t dashboard/webserver -f dashboard-webserver.dockerfile .
 	docker rm -f dashboard.envoy.v2 || true
@@ -46,7 +46,7 @@ irrigation-frontend:
 	docker rm -f irrigation.frontend || true
 	docker run --name irrigation.frontend -d --network=host --restart always irrigation:frontend
 
-irrigation: irrigation-controller irrigation-monitor irrigation-frontend
+irrigation-all: irrigation-controller irrigation-monitor irrigation-frontend
 
 weather:
 	docker build -t weather -f weather.dockerfile .

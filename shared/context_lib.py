@@ -7,7 +7,7 @@ from third_party.common import pattern
 
 class Context(pattern.Logger):
   def __init__(self, config, livemode=True, clock=None, kafka_endpoint=None, storage=None, *args, **kwargs):
-    super().__init__(self, *args, **kwargs)
+    super().__init__(*args, **kwargs)
     self._config = config
     self._livemode = livemode
     self._clock = clock
