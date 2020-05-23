@@ -13,7 +13,12 @@ module.exports = {
       options: {
         xaxis: {
           type: "datetime"
-        }
+        },
+        yaxis: [
+          {
+            min: 0,
+          }
+        ]
       },
       series: []
     };

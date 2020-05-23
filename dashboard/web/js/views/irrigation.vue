@@ -116,10 +116,10 @@ module.exports = {
   },
   created() {
     this.weatherService = new proto.ha.weather.WeatherServiceClient(
-      "http://server:17082"
+      `http://${location.hostname}:17082`
     );
     this.irrigationService = new proto.ha.irrigation.IrrigationServiceClient(
-      "http://server:17081"
+      `http://${location.hostname}:17081`
     );
     this.refreshZones();
     this.refreshTasks();

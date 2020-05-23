@@ -48,7 +48,7 @@ irrigation-frontend:
 
 irrigation-all: irrigation-controller irrigation-monitor irrigation-frontend
 
-weather:
+weather-all:
 	docker build -t weather -f weather.dockerfile .
 	docker rm -f weather || true
 	docker run --name weather -d --network=host --restart always weather

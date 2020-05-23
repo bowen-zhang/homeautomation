@@ -5,6 +5,7 @@ CLOSURE_COMPILER = tools/closure-compiler-v20200406.jar
 JS_IMPORT_STYLE = closure,binary
 
 init:
+	sudo apt-get install python3-pip -y
 	pip3 install -r requirements.txt --user
 
 build-js:
