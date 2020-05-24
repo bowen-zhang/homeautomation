@@ -1,7 +1,7 @@
 from irrigation.proto import irrigation_pb2
+from third_party.common import pattern
 
-
-class MockGPIO(object):
+class MockGPIO(pattern.Logger):
   IN = 0
   OUT = 1
   HIGH = 0
@@ -18,7 +18,7 @@ class MockGPIO(object):
     pass
 
   def output(self, pin, value):
-    print('Pin {0} = {1}'.format(pin, value))
+    self.logger.info('[MOCK] Set pin {0} to {1}.'.format(pin, value))
 
 
 def init_test_db(context):

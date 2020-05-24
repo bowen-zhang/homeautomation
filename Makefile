@@ -34,7 +34,7 @@ dashboard-all:
 irrigation-controller:
 	docker build -t irrigation:controller -f irrigation-controller.dockerfile .
 	docker rm -f irrigation.controller || true
-	docker run --name irrigation.controller -d --network=host --restart always irrigation:controller
+	docker run --name irrigation.controller --privileged -d --network=host --restart always irrigation:controller
 
 irrigation-monitor:
 	docker build -t irrigation:monitor -f irrigation-monitor.dockerfile .

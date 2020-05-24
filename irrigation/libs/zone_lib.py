@@ -10,9 +10,8 @@ class Zone(pattern.Logger):
     self._proto = proto
     self._clock = context.clock
     if context.livemode:
-      # from RPi import GPIO
-      # self._gpio = GPIO
-      self._gpio = mock_lib.MockGPIO()
+      from RPi import GPIO
+      self._gpio = GPIO
     else:
       self._gpio = mock_lib.MockGPIO()
     self._running = False

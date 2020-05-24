@@ -24,15 +24,19 @@ controller: {
   max_running_secs_per_day: 3600
 }
 zookeeper {
-  host: "server"
+  host: "192.168.86.250"
   port: 2181
 }
 kafka {
-  host: "server"
+  host: "192.168.86.250"
   port: 9092
 }
+mongodb {
+  host: "192.168.86.250"
+  port: 27017
+}
 irrigation_service {
-  host: "server"
+  host: "192.168.86.250"
   port: 17052
 }
 controller_service {

@@ -16,7 +16,9 @@ class Context(context_lib.Context, zookeeper_mixin.Context):
   def __init__(self, config=None, livemode=True, clock=None, storage=None, *args, **kwargs):
     if livemode:
       clock = time_util.RealWorldClock()
-      storage = storage_lib.MongoStorage(database_name='irrigation')
+      storage = storage_lib.MongoStorage(server=config.mongodb.host,
+                                         port=config.mongodb.port,
+                                         database_name='irrigation')
     else:
       clock = clock or time_util.MockClock(now=datetime.datetime(2020, 1, 1, 4, 0, 0),
                                            elapse_rate=500.0)
