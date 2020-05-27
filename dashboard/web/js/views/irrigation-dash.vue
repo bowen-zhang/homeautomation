@@ -16,18 +16,25 @@ module.exports = {
         },
         yaxis: [
           {
-            min: 0,
+            min: 0
           }
         ]
       },
       series: []
     };
   },
-  created() {
-    this.load();
+  watch: {
+    zone: {
+      handler(newVal) {
+        if (newVal) {
+          this.refresh();
+        }
+      },
+      immediate: true
+    }
   },
   methods: {
-    load() {
+    refresh() {
       const request = new proto.ha.irrigation.GetWaterLevelHistoryRequest();
       request.setZoneId(this.zone.id);
       request.setMaxDays(3);
@@ -35,11 +42,11 @@ module.exports = {
         request,
         {},
         (err, response) => {
-          this.onLoad(response);
+          this.onRefresh(response);
         }
       );
     },
-    onLoad(response) {
+    onRefresh(response) {
       const waterLevels = response.getWaterLevelsList();
       this.options = this.getOptions(response);
       this.series = [
@@ -110,15 +117,6 @@ module.exports = {
           ]
         }
       };
-      options.annotations.xaxis = [
-        {
-          x: new Date("5/19/2020 00:00:00").getTime(),
-          x2: new Date("5/19/2020 00:10:00").getTime(),
-          label: {
-            text: "Test"
-          }
-        }
-      ];
       options.annotations.xaxis = runs.map(run => ({
         x: run
           .getStartAt()

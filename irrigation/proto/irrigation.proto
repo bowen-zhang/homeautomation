@@ -9,11 +9,12 @@ import "google/protobuf/timestamp.proto";
 // Database Models
 message Zone {
 	int32 id = 1;
-	string name = 2;
-  uint32 pin = 3;
-  float flow_rate_mmpm = 4;
-  float max_water_amount_mm = 5;
-  float evaporation_rate_mmpm = 6;
+  string name = 2;
+  string group = 3;
+  uint32 pin = 4;
+  float flow_rate_mmpm = 5;
+  float max_water_amount_mm = 6;
+  float evaporation_rate_mmpm = 7;
 }
 
 message Run {
@@ -78,6 +79,16 @@ message ZoneList {
   repeated Zone zones = 1;
 }
 
+message GetZoneInfoRequest {
+  int32 zone_id = 1;
+}
+
+message GetZoneInfoResponse {
+  int32 zone_id = 1;
+  float current_water_level_mm = 2;
+  google.protobuf.Timestamp last_run_time = 3;
+}
+
 enum By {
   UNKNOWN = 0;
   USER = 1;
@@ -127,6 +138,7 @@ service IrrigationService {
   rpc DismissAlert(DismissAlertRequest) returns (google.protobuf.Empty) {}
 
   rpc GetAllZones(google.protobuf.Empty) returns (ZoneList) {}
+  rpc GetZoneInfo(GetZoneInfoRequest) returns (GetZoneInfoResponse) {}
   rpc SaveZone(Zone) returns (google.protobuf.Empty) {}
 
   rpc GetWaterLevelHistory(GetWaterLevelHistoryRequest) returns (GetWaterLevelHistoryResponse) {}

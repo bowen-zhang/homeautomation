@@ -14,7 +14,10 @@
       <v-card-text>
         <v-container>
           <v-row>
-            <v-col cols="10">
+            <v-col cols="5">
+              <v-text-field label="Group" v-model="zone.group" hide-details></v-text-field>
+            </v-col>
+            <v-col cols="5">
               <v-text-field label="Name" v-model="zone.name" hide-details></v-text-field>
             </v-col>
             <v-col cols="2">

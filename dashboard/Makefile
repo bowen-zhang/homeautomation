@@ -7,6 +7,16 @@ JS_IMPORT_STYLE = closure,binary
 init:
 	sudo apt-get install python3-pip -y
 	pip3 install -r requirements.txt --user
+	# Install latest protoc
+	wget -O /tmp/protoc.zip https://github.com/protocolbuffers/protobuf/releases/download/v3.12.2/protoc-3.12.2-linux-x86_64.zip
+	unzip /tmp/protoc.zip -d /tmp/protoc
+	chmod -R 755 /tmp/protoc
+	sudo cp /tmp/protoc/bin/protoc /usr/local/bin
+	sudo rm -rf /usr/local/include/google
+	sudo cp -r /tmp/protoc/include/google /usr/local/include
+	# Install proto-gen-grpc-web plugin
+	sudo apt-get install libprotoc-dev
+	cd ../third_party/grpc-web && sudo make install-plugin
 
 build-js:
 	rm -rf ./build

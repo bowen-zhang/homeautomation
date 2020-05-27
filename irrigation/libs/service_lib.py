@@ -1,6 +1,7 @@
 import datetime
 import pymongo
 from google.protobuf import empty_pb2
+from google.protobuf import timestamp_pb2
 
 from irrigation.proto import irrigation_pb2
 from irrigation.proto import irrigation_pb2_grpc
@@ -31,6 +32,26 @@ class IrrigationService(irrigation_pb2_grpc.IrrigationServiceServicer, pattern.L
   def GetAllZones(self, _, context):
     zones = list(self._context.storage.zones.find())
     return irrigation_pb2.ZoneList(zones=zones)
+
+  def GetZoneInfo(self, request, context):
+    water_level = self._context.storage.water_levels.find_one(
+      filter={
+        'zone_id': request.zone_id,
+      },
+      sort=[('timeslot', pymongo.DESCENDING)],
+      limit=1)
+    run = self._context.storage.runs.find_one(
+      filter={
+        'zone_id': request.zone_id,
+      },
+      sort=[('start_at', pymongo.DESCENDING)],
+      limit=1
+    )
+    return irrigation_pb2.GetZoneInfoResponse(
+      zone_id=request.zone_id,
+      current_water_level_mm=water_level.current_amount_mm if water_level else -1,
+      last_run_time = run.stop_at if run else timestamp_pb2.Timestamp(),
+    )
 
   def SaveZone(self, zone, context):
     self._context.storage.zones.save(zone, filter={'id': zone.id})

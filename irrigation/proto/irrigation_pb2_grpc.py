@@ -34,6 +34,11 @@ class IrrigationServiceStub(object):
                 request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
                 response_deserializer=irrigation__pb2.ZoneList.FromString,
                 )
+        self.GetZoneInfo = channel.unary_unary(
+                '/ha.irrigation.IrrigationService/GetZoneInfo',
+                request_serializer=irrigation__pb2.GetZoneInfoRequest.SerializeToString,
+                response_deserializer=irrigation__pb2.GetZoneInfoResponse.FromString,
+                )
         self.SaveZone = channel.unary_unary(
                 '/ha.irrigation.IrrigationService/SaveZone',
                 request_serializer=irrigation__pb2.Zone.SerializeToString,
@@ -93,6 +98,12 @@ class IrrigationServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def GetAllZones(self, request, context):
+        """Missing associated documentation comment in .proto file"""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetZoneInfo(self, request, context):
         """Missing associated documentation comment in .proto file"""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -162,6 +173,11 @@ def add_IrrigationServiceServicer_to_server(servicer, server):
                     servicer.GetAllZones,
                     request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                     response_serializer=irrigation__pb2.ZoneList.SerializeToString,
+            ),
+            'GetZoneInfo': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetZoneInfo,
+                    request_deserializer=irrigation__pb2.GetZoneInfoRequest.FromString,
+                    response_serializer=irrigation__pb2.GetZoneInfoResponse.SerializeToString,
             ),
             'SaveZone': grpc.unary_unary_rpc_method_handler(
                     servicer.SaveZone,
@@ -269,6 +285,22 @@ class IrrigationService(object):
         return grpc.experimental.unary_unary(request, target, '/ha.irrigation.IrrigationService/GetAllZones',
             google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             irrigation__pb2.ZoneList.FromString,
+            options, channel_credentials,
+            call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetZoneInfo(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/ha.irrigation.IrrigationService/GetZoneInfo',
+            irrigation__pb2.GetZoneInfoRequest.SerializeToString,
+            irrigation__pb2.GetZoneInfoResponse.FromString,
             options, channel_credentials,
             call_credentials, compression, wait_for_ready, timeout, metadata)
 
