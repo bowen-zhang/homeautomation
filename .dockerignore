@@ -1,2 +1,4 @@
 .git
-.cache
+third_party/grpc-web
+third_party/protobuf
+third_party/closure-library
