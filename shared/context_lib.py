@@ -13,8 +13,11 @@ class Context(pattern.Logger):
     self._clock = clock
     self._storage = storage
     self._topic_prefix = '' if livemode else 'test.'
-    self._kafka_server = '{0}:{1}'.format(
-        kafka_endpoint.host, kafka_endpoint.port)
+    if kafka_endpoint:
+      self._kafka_server = '{0}:{1}'.format(
+          kafka_endpoint.host, kafka_endpoint.port)
+    else:
+      self._kafka_server = None
     self._kafka_producer = None
 
     self.logger.info('Running in %s mode.', 'LIVE' if livemode else 'TEST')

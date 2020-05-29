@@ -1,0 +1,26 @@
+syntax="proto3";
+
+package ha.security;
+
+import "google/protobuf/duration.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "shared/proto/common.proto";
+
+
+message Config {
+  ha.Endpoint security_service = 1;
+}
+
+message StreamVideoRequest {
+  google.protobuf.Timestamp timestamp = 1;
+  bytes image = 2;
+}
+
+message StreamVideoResponse {
+
+}
+
+service SecurityService {
+  rpc StreamVideo(stream StreamVideoRequest) returns (stream StreamVideoResponse) {}
+}

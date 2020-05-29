@@ -1,0 +1,4 @@
+security_service: {
+  host: "server"
+  port: 17055
+}

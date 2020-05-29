@@ -13,3 +13,6 @@
 [submodule "third_party/mongo_utils"]
 	path = third_party/mongo_utils
 	url = git@github.com:bowen-zhang/mongo_utils.git
+[submodule "third_party/hal"]
+	path = third_party/hal
+	url = git@github.com:bowen-zhang/hal.git
