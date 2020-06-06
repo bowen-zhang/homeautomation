@@ -7,20 +7,64 @@ import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
 import "shared/proto/common.proto";
 
+// Database Object
+
+message Archive {
+  string location = 1;
+  int64 max_size = 2;
+  int32 max_days = 3;
+}
+
+message Video {
+  int32 width = 1;
+  int32 height = 2;
+  int32 framerate = 3;
+  int32 quality = 4;
+  
+  Archive local_archive = 5;
+}
+
+message Component {
+  oneof kind {
+    Video video = 1;
+  }
+}
+
+message Node {
+  string id = 1;
+  string name = 2;
+  repeated Component components = 3;
+}
+
+// Configuration
 
 message Config {
-  ha.Endpoint security_service = 1;
+  ha.Endpoint security_service = 1;  
+  ha.Endpoint kafka = 2;
+  ha.Endpoint mongodb = 3;
+  ha.Endpoint webserver = 4;
+
+  repeated Node nodes = 5;
+}
+
+// gRPC Service
+
+message GetNodeRequest {
+  string node_id = 1;
 }
 
 message StreamVideoRequest {
-  google.protobuf.Timestamp timestamp = 1;
-  bytes image = 2;
+  string node_id = 1;
+  google.protobuf.Timestamp timestamp = 2;
+  bytes image = 3;
+  bool split = 4;
 }
 
 message StreamVideoResponse {
-
+  bool split = 1;
 }
 
 service SecurityService {
+  rpc GetNode(GetNodeRequest) returns (Node) {}
   rpc StreamVideo(stream StreamVideoRequest) returns (stream StreamVideoResponse) {}
 }

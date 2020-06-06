@@ -22,24 +22,38 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='ha.security',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=b'\n\x0esecurity.proto\x12\x0bha.security\x1a\x1egoogle/protobuf/duration.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x19shared/proto/common.proto\"0\n\x06\x43onfig\x12&\n\x10security_service\x18\x01 \x01(\x0b\x32\x0c.ha.Endpoint\"C\n\x12StreamVideoRequest\x12-\n\ttimestamp\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"\x15\n\x13StreamVideoResponse2i\n\x0fSecurityService\x12V\n\x0bStreamVideo\x12\x1f.ha.security.StreamVideoRequest\x1a .ha.security.StreamVideoResponse\"\x00(\x01\x30\x01\x62\x06proto3'
+  serialized_pb=b'\n\x0esecurity.proto\x12\x0bha.security\x1a\x1egoogle/protobuf/duration.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x19shared/proto/common.proto\"?\n\x07\x41rchive\x12\x10\n\x08location\x18\x01 \x01(\t\x12\x10\n\x08max_size\x18\x02 \x01(\x03\x12\x10\n\x08max_days\x18\x03 \x01(\x05\"w\n\x05Video\x12\r\n\x05width\x18\x01 \x01(\x05\x12\x0e\n\x06height\x18\x02 \x01(\x05\x12\x11\n\tframerate\x18\x03 \x01(\x05\x12\x0f\n\x07quality\x18\x04 \x01(\x05\x12+\n\rlocal_archive\x18\x05 \x01(\x0b\x32\x14.ha.security.Archive\"8\n\tComponent\x12#\n\x05video\x18\x01 \x01(\x0b\x32\x12.ha.security.VideoH\x00\x42\x06\n\x04kind\"L\n\x04Node\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12*\n\ncomponents\x18\x03 \x03(\x0b\x32\x16.ha.security.Component\"\xaf\x01\n\x06\x43onfig\x12&\n\x10security_service\x18\x01 \x01(\x0b\x32\x0c.ha.Endpoint\x12\x1b\n\x05kafka\x18\x02 \x01(\x0b\x32\x0c.ha.Endpoint\x12\x1d\n\x07mongodb\x18\x03 \x01(\x0b\x32\x0c.ha.Endpoint\x12\x1f\n\twebserver\x18\x04 \x01(\x0b\x32\x0c.ha.Endpoint\x12 \n\x05nodes\x18\x05 \x03(\x0b\x32\x11.ha.security.Node\"!\n\x0eGetNodeRequest\x12\x0f\n\x07node_id\x18\x01 \x01(\t\"r\n\x12StreamVideoRequest\x12\x0f\n\x07node_id\x18\x01 \x01(\t\x12-\n\ttimestamp\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\r\n\x05image\x18\x03 \x01(\x0c\x12\r\n\x05split\x18\x04 \x01(\x08\"$\n\x13StreamVideoResponse\x12\r\n\x05split\x18\x01 \x01(\x08\x32\xa6\x01\n\x0fSecurityService\x12;\n\x07GetNode\x12\x1b.ha.security.GetNodeRequest\x1a\x11.ha.security.Node\"\x00\x12V\n\x0bStreamVideo\x12\x1f.ha.security.StreamVideoRequest\x1a .ha.security.StreamVideoResponse\"\x00(\x01\x30\x01\x62\x06proto3'
   ,
   dependencies=[google_dot_protobuf_dot_duration__pb2.DESCRIPTOR,google_dot_protobuf_dot_empty__pb2.DESCRIPTOR,google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,shared_dot_proto_dot_common__pb2.DESCRIPTOR,])
 
 
 
 
-_CONFIG = _descriptor.Descriptor(
-  name='Config',
-  full_name='ha.security.Config',
+_ARCHIVE = _descriptor.Descriptor(
+  name='Archive',
+  full_name='ha.security.Archive',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='security_service', full_name='ha.security.Config.security_service', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
+      name='location', full_name='ha.security.Archive.location', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='max_size', full_name='ha.security.Archive.max_size', index=1,
+      number=2, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='max_days', full_name='ha.security.Archive.max_days', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -56,20 +70,48 @@ _CONFIG = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=152,
-  serialized_end=200,
+  serialized_end=215,
 )
 
 
-_STREAMVIDEOREQUEST = _descriptor.Descriptor(
-  name='StreamVideoRequest',
-  full_name='ha.security.StreamVideoRequest',
+_VIDEO = _descriptor.Descriptor(
+  name='Video',
+  full_name='ha.security.Video',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='timestamp', full_name='ha.security.StreamVideoRequest.timestamp', index=0,
-      number=1, type=11, cpp_type=10, label=1,
+      name='width', full_name='ha.security.Video.width', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='height', full_name='ha.security.Video.height', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='framerate', full_name='ha.security.Video.framerate', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='quality', full_name='ha.security.Video.quality', index=3,
+      number=4, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='local_archive', full_name='ha.security.Video.local_archive', index=4,
+      number=5, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -86,18 +128,73 @@ _STREAMVIDEOREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=202,
-  serialized_end=269,
+  serialized_start=217,
+  serialized_end=336,
 )
 
 
-_STREAMVIDEORESPONSE = _descriptor.Descriptor(
-  name='StreamVideoResponse',
-  full_name='ha.security.StreamVideoResponse',
+_COMPONENT = _descriptor.Descriptor(
+  name='Component',
+  full_name='ha.security.Component',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
+    _descriptor.FieldDescriptor(
+      name='video', full_name='ha.security.Component.video', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+    _descriptor.OneofDescriptor(
+      name='kind', full_name='ha.security.Component.kind',
+      index=0, containing_type=None, fields=[]),
+  ],
+  serialized_start=338,
+  serialized_end=394,
+)
+
+
+_NODE = _descriptor.Descriptor(
+  name='Node',
+  full_name='ha.security.Node',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='id', full_name='ha.security.Node.id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='name', full_name='ha.security.Node.name', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='components', full_name='ha.security.Node.components', index=2,
+      number=3, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -110,16 +207,232 @@ _STREAMVIDEORESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=271,
-  serialized_end=292,
+  serialized_start=396,
+  serialized_end=472,
 )
 
+
+_CONFIG = _descriptor.Descriptor(
+  name='Config',
+  full_name='ha.security.Config',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='security_service', full_name='ha.security.Config.security_service', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='kafka', full_name='ha.security.Config.kafka', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='mongodb', full_name='ha.security.Config.mongodb', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='webserver', full_name='ha.security.Config.webserver', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='nodes', full_name='ha.security.Config.nodes', index=4,
+      number=5, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=475,
+  serialized_end=650,
+)
+
+
+_GETNODEREQUEST = _descriptor.Descriptor(
+  name='GetNodeRequest',
+  full_name='ha.security.GetNodeRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='node_id', full_name='ha.security.GetNodeRequest.node_id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=652,
+  serialized_end=685,
+)
+
+
+_STREAMVIDEOREQUEST = _descriptor.Descriptor(
+  name='StreamVideoRequest',
+  full_name='ha.security.StreamVideoRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='node_id', full_name='ha.security.StreamVideoRequest.node_id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='timestamp', full_name='ha.security.StreamVideoRequest.timestamp', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='image', full_name='ha.security.StreamVideoRequest.image', index=2,
+      number=3, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='split', full_name='ha.security.StreamVideoRequest.split', index=3,
+      number=4, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=687,
+  serialized_end=801,
+)
+
+
+_STREAMVIDEORESPONSE = _descriptor.Descriptor(
+  name='StreamVideoResponse',
+  full_name='ha.security.StreamVideoResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='split', full_name='ha.security.StreamVideoResponse.split', index=0,
+      number=1, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=803,
+  serialized_end=839,
+)
+
+_VIDEO.fields_by_name['local_archive'].message_type = _ARCHIVE
+_COMPONENT.fields_by_name['video'].message_type = _VIDEO
+_COMPONENT.oneofs_by_name['kind'].fields.append(
+  _COMPONENT.fields_by_name['video'])
+_COMPONENT.fields_by_name['video'].containing_oneof = _COMPONENT.oneofs_by_name['kind']
+_NODE.fields_by_name['components'].message_type = _COMPONENT
 _CONFIG.fields_by_name['security_service'].message_type = shared_dot_proto_dot_common__pb2._ENDPOINT
+_CONFIG.fields_by_name['kafka'].message_type = shared_dot_proto_dot_common__pb2._ENDPOINT
+_CONFIG.fields_by_name['mongodb'].message_type = shared_dot_proto_dot_common__pb2._ENDPOINT
+_CONFIG.fields_by_name['webserver'].message_type = shared_dot_proto_dot_common__pb2._ENDPOINT
+_CONFIG.fields_by_name['nodes'].message_type = _NODE
 _STREAMVIDEOREQUEST.fields_by_name['timestamp'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
+DESCRIPTOR.message_types_by_name['Archive'] = _ARCHIVE
+DESCRIPTOR.message_types_by_name['Video'] = _VIDEO
+DESCRIPTOR.message_types_by_name['Component'] = _COMPONENT
+DESCRIPTOR.message_types_by_name['Node'] = _NODE
 DESCRIPTOR.message_types_by_name['Config'] = _CONFIG
+DESCRIPTOR.message_types_by_name['GetNodeRequest'] = _GETNODEREQUEST
 DESCRIPTOR.message_types_by_name['StreamVideoRequest'] = _STREAMVIDEOREQUEST
 DESCRIPTOR.message_types_by_name['StreamVideoResponse'] = _STREAMVIDEORESPONSE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
+
+Archive = _reflection.GeneratedProtocolMessageType('Archive', (_message.Message,), {
+  'DESCRIPTOR' : _ARCHIVE,
+  '__module__' : 'security_pb2'
+  # @@protoc_insertion_point(class_scope:ha.security.Archive)
+  })
+_sym_db.RegisterMessage(Archive)
+
+Video = _reflection.GeneratedProtocolMessageType('Video', (_message.Message,), {
+  'DESCRIPTOR' : _VIDEO,
+  '__module__' : 'security_pb2'
+  # @@protoc_insertion_point(class_scope:ha.security.Video)
+  })
+_sym_db.RegisterMessage(Video)
+
+Component = _reflection.GeneratedProtocolMessageType('Component', (_message.Message,), {
+  'DESCRIPTOR' : _COMPONENT,
+  '__module__' : 'security_pb2'
+  # @@protoc_insertion_point(class_scope:ha.security.Component)
+  })
+_sym_db.RegisterMessage(Component)
+
+Node = _reflection.GeneratedProtocolMessageType('Node', (_message.Message,), {
+  'DESCRIPTOR' : _NODE,
+  '__module__' : 'security_pb2'
+  # @@protoc_insertion_point(class_scope:ha.security.Node)
+  })
+_sym_db.RegisterMessage(Node)
 
 Config = _reflection.GeneratedProtocolMessageType('Config', (_message.Message,), {
   'DESCRIPTOR' : _CONFIG,
@@ -127,6 +440,13 @@ Config = _reflection.GeneratedProtocolMessageType('Config', (_message.Message,),
   # @@protoc_insertion_point(class_scope:ha.security.Config)
   })
 _sym_db.RegisterMessage(Config)
+
+GetNodeRequest = _reflection.GeneratedProtocolMessageType('GetNodeRequest', (_message.Message,), {
+  'DESCRIPTOR' : _GETNODEREQUEST,
+  '__module__' : 'security_pb2'
+  # @@protoc_insertion_point(class_scope:ha.security.GetNodeRequest)
+  })
+_sym_db.RegisterMessage(GetNodeRequest)
 
 StreamVideoRequest = _reflection.GeneratedProtocolMessageType('StreamVideoRequest', (_message.Message,), {
   'DESCRIPTOR' : _STREAMVIDEOREQUEST,
@@ -150,13 +470,22 @@ _SECURITYSERVICE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=294,
-  serialized_end=399,
+  serialized_start=842,
+  serialized_end=1008,
   methods=[
+  _descriptor.MethodDescriptor(
+    name='GetNode',
+    full_name='ha.security.SecurityService.GetNode',
+    index=0,
+    containing_service=None,
+    input_type=_GETNODEREQUEST,
+    output_type=_NODE,
+    serialized_options=None,
+  ),
   _descriptor.MethodDescriptor(
     name='StreamVideo',
     full_name='ha.security.SecurityService.StreamVideo',
-    index=0,
+    index=1,
     containing_service=None,
     input_type=_STREAMVIDEOREQUEST,
     output_type=_STREAMVIDEORESPONSE,

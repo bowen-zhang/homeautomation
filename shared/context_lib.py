@@ -3,6 +3,7 @@ import kafka
 
 from shared import topics
 from third_party.common import pattern
+from third_party.common import time_util
 
 
 class Context(pattern.Logger):
@@ -10,7 +11,7 @@ class Context(pattern.Logger):
     super().__init__(*args, **kwargs)
     self._config = config
     self._livemode = livemode
-    self._clock = clock
+    self._clock = clock or time_util.RealWorldClock()
     self._storage = storage
     self._topic_prefix = '' if livemode else 'test.'
     if kafka_endpoint:
