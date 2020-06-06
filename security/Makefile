@@ -4,10 +4,15 @@ PYTHON_PROTOC = $(PYTHON) -m grpc_tools.protoc
 PROTO_DIR = ./proto
 
 init:
-	sudo apt install ffmpeg
 	sudo apt-get install python3-pip -y
 	sudo apt install protobuf-compiler -y
-	pip3 install -r requirements.txt --user
+
+init-server: init
+	pip3 install -r requirements.server.txt --user
+	sudo apt install ffmpeg
+
+init-node: init
+	pip3 install -r requirements.node.txt --user
 
 build-proto:
 	rm -f $(PROTO_DIR)/*pb2*.py

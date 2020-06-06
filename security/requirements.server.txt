@@ -1,0 +1,6 @@
+absl-py
+ffmpeg-python
+flask
+grpcio-tools
+kafka-python
+opencv-python
