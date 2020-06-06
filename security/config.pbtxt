@@ -1,0 +1,33 @@
+security_service {
+  host: "server"
+  port: 17055
+}
+kafka {
+  host: "server"
+  port: 9092
+}
+mongodb {
+  host: "server"
+  port: 27017
+}
+webserver {
+  host: "server"
+  port: 6251
+}
+nodes {
+  id: "b827eb40e5c0"
+  name: "Front Door"
+  components {
+    video {
+      width: 1440
+      height: 1080
+      framerate: 30
+      quality: 20
+      local_archive {
+        location: "/data/security/video"
+        max_size: 26000000000
+        max_days: 5
+      }
+    }
+  }
+}

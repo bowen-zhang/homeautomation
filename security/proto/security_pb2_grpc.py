@@ -13,6 +13,11 @@ class SecurityServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
+        self.GetNode = channel.unary_unary(
+                '/ha.security.SecurityService/GetNode',
+                request_serializer=security__pb2.GetNodeRequest.SerializeToString,
+                response_deserializer=security__pb2.Node.FromString,
+                )
         self.StreamVideo = channel.stream_stream(
                 '/ha.security.SecurityService/StreamVideo',
                 request_serializer=security__pb2.StreamVideoRequest.SerializeToString,
@@ -23,6 +28,12 @@ class SecurityServiceStub(object):
 class SecurityServiceServicer(object):
     """Missing associated documentation comment in .proto file"""
 
+    def GetNode(self, request, context):
+        """Missing associated documentation comment in .proto file"""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def StreamVideo(self, request_iterator, context):
         """Missing associated documentation comment in .proto file"""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -32,6 +43,11 @@ class SecurityServiceServicer(object):
 
 def add_SecurityServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
+            'GetNode': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetNode,
+                    request_deserializer=security__pb2.GetNodeRequest.FromString,
+                    response_serializer=security__pb2.Node.SerializeToString,
+            ),
             'StreamVideo': grpc.stream_stream_rpc_method_handler(
                     servicer.StreamVideo,
                     request_deserializer=security__pb2.StreamVideoRequest.FromString,
@@ -46,6 +62,22 @@ def add_SecurityServiceServicer_to_server(servicer, server):
  # This class is part of an EXPERIMENTAL API.
 class SecurityService(object):
     """Missing associated documentation comment in .proto file"""
+
+    @staticmethod
+    def GetNode(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/ha.security.SecurityService/GetNode',
+            security__pb2.GetNodeRequest.SerializeToString,
+            security__pb2.Node.FromString,
+            options, channel_credentials,
+            call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
     def StreamVideo(request_iterator,
