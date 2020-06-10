@@ -1,0 +1,17 @@
+[Unit]
+Description=HomeAutomation.Security
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=pi
+Environment=PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
+Environment=PYTHONPATH=/home/pi/src/homeautomation
+WorkingDirectory=/home/pi/src/homeautomation
+ExecStart=/usr/bin/python3 /home/pi/src/homeautomation/security/node.py --config_path=security/config.pbtxt --log_to_file
+
+[Install]
+WantedBy=multi-user.target

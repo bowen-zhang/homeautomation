@@ -24,8 +24,7 @@ class NodeApp(app.App):
     self._node_proto = None
 
   def run(self):
-    while not self._init():
-      time.sleep(5)
+    self._init()
 
     self.logger.info('Starting node \"{0}\"...'.format(self._node_proto.name))
 
@@ -35,20 +34,25 @@ class NodeApp(app.App):
     for component in self._components:
       component.start()
 
-    while True:
-      time.sleep(1)
+    try:
+      while True:
+        time.sleep(1)
+    except:
+      for component in self._components:
+        component.stop()
 
   def _init(self):
+    self.logger.info('Registering node {0}...'.format(self._context.id))
+
     request = security_pb2.RegisterNodeRequest(node_id=self._context.id)
-    try:
-      self.logger.info('Registering node {0}...'.format(self._context.id))
-      response = self._context.security_service.RegisterNode(request)
-      self._node_proto = response.node
-      self.logger.info('Received node configuration.')
-      return True
-    except grpc.RpcError:
-      self.logger.error('Unable to register node to server.')
-      return False
+    while True:
+      try:
+        response = self._context.security_service.RegisterNode(request)
+        self._node_proto = response.node
+        self.logger.info('Received node configuration.')
+        return
+      except grpc.RpcError:
+        time.sleep(5)
 
 
 if __name__ == '__main__':

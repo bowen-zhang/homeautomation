@@ -31,3 +31,9 @@ run-server: build-proto
 
 run-node: build-proto
 	PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION='python' PYTHONPATH=$(CURDIR)/.. $(PYTHON) node.py
+
+install-node-on-pizero:
+	sudo cp pizero/node.service /etc/systemd/system/ha-security-node.service
+	sudo systemctl daemon-reload
+	sudo systemctl start ha-security-node
+	sudo systemctl enable ha-security-node
