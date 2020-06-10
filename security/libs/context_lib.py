@@ -25,11 +25,3 @@ class NodeContext(context_lib.Context):
           security_pb2_grpc.SecurityServiceStub,
           self.config.security_service)
     return self._security_service
-
-  @property
-  def node_proto(self):
-    if not self._node_proto:
-      self._node_proto = self.security_service.GetNode(
-          security_pb2.GetNodeRequest(node_id=self.id))
-      self.logger.info('Received node configuration.')
-    return self._node_proto

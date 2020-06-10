@@ -14,7 +14,7 @@ class StreamingException(Exception):
   pass
 
 
-class _VideoProxy(pattern.Logger):
+class _StreamProxy(pattern.Logger):
   """Middleman to deal recorded frames from Pi camera to uploader."""
   _MAX_READ_BLOCK_SEC = 1
   _MAX_WRITE_BLOCK_SEC = 5
@@ -22,16 +22,13 @@ class _VideoProxy(pattern.Logger):
   def __init__(self, max_cache_frames, *args, **kwargs):
     super().__init__(*args, **kwargs)
     self._max_cache_frames = max_cache_frames
-    self._frame_queue = None
-
-  @property
-  def is_stopped(self):
-    return self._frame_queue is None
-
-  def start(self):
     self._frame_queue = queue.Queue(maxsize=self._max_cache_frames)
 
-  def stop(self):
+  @property
+  def closed(self):
+    return self._frame_queue is None
+
+  def close(self):
     self._frame_queue = None
 
   def read(self):
@@ -44,24 +41,14 @@ class _VideoProxy(pattern.Logger):
     except:
       raise StreamingException("Timed out while waiting for recording.")
 
-  def write(self, data, split):
-    """Writes a frame.
-
-    Args:
-      data: frame.
-      split: weather this is beginning of a new file.
-    """
+  def write(self, data):
     frame_queue = self._frame_queue
     if not frame_queue:
       return
 
-    if split:
-      self.logger.info('Recording is splitted.')
-
     request = security_pb2.StreamVideoRequest()
     request.timestamp.FromDatetime(datetime.datetime.now())
     request.image = data
-    request.split = split
 
     if frame_queue.full():
       self.logger.warn("Video streaming is slower than capturing.")
@@ -74,24 +61,9 @@ class _VideoProxy(pattern.Logger):
       self.stop()
 
 
-class _MemoryStream(object):
-  """File-like interface for Pi camera to write frame to middleman.
-
-  This additional layer is necessary, as when splitting recordings, a new
-  _MemoryStream is used (to detect split point and notify video receiver)
-  but underneath middleman remains the same (so it is easy to manage lifecycle).
-  """
-  def __init__(self, video_proxy):
-    self._proxy = video_proxy
-    self._first = True
-
-  def write(self, data):
-    self._proxy.write(data, split=self._first)
-    self._first = False
-
-
 class VideoCapturer(pattern.Worker):
-  MAX_QUEUE_LENGTH_SEC = 3
+  _MAX_QUEUE_LENGTH_SEC = 3
+  _MAX_STREAMING_DELAY_SEC = 5
 
   def __init__(self, context, config, *args, **kwargs):
     super().__init__(interval=datetime.timedelta(
@@ -100,34 +72,44 @@ class VideoCapturer(pattern.Worker):
     self._config = config
     self._proxy = None
     self._camera = None
+    self._ready = threading.Event()
 
   def _on_start(self):
-    self._proxy = _VideoProxy(
-        max_cache_frames=self._config.framerate * self.MAX_QUEUE_LENGTH_SEC)
     self._camera = picamera.PiCamera(framerate=self._config.framerate,
                                      resolution=(self._config.width, self._config.height))
-    self._camera.start_recording(_MemoryStream(self._proxy),
-                                 format='h264',
-                                 quality=self._config.quality)
 
   def _on_run(self):
     self.logger.info('Starting streaming...')
 
-    splitted = False
-    self._proxy.start()
+    self._proxy = _StreamProxy(
+        max_cache_frames=self._config.framerate * self._MAX_QUEUE_LENGTH_SEC)
 
     try:
-      for response in self._context.security_service.StreamVideo(self._stream_frames()):
-        if not splitted and response.split:
-          self.logger.info("Splitting recording per server request...")
-          self._camera.split_recording(_MemoryStream(self._proxy))
-        splitted = response.split
+      for _ in self._context.security_service.StreamVideo(self._stream_frames()):
+        self._ready.set()
     finally:
-      self._proxy.stop()
+      self._proxy.close()
       self.logger.info('Streaming stopped.')
 
   def _stream_frames(self):
-    while True:
-      request = self._proxy.read()
-      request.node_id = self._context.id
-      yield request
+    yield security_pb2.StreamVideoRequest(node_id=self._context.id)
+    if not self._ready.wait(timeout=5):
+      raise StreamingException(
+          "Timed out while waiting for server to respond to initial streaming request.")
+
+    self._camera.start_recording(self._proxy,
+                                 format='h264',
+                                 quality=self._config.quality)
+    try:
+      while True:
+        self._ready.clear()
+
+        request = self._proxy.read()
+        request.node_id = self._context.id
+        yield request
+
+        if not self._ready.wait(timeout=self._MAX_STREAMING_DELAY_SEC):
+          raise StreamingException(
+              "Timed out while waiting for server to respond to streaming request.")
+    finally:
+      self._camera.stop_recording()

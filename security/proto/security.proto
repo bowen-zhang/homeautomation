@@ -49,22 +49,24 @@ message Config {
 
 // gRPC Service
 
-message GetNodeRequest {
+message RegisterNodeRequest {
   string node_id = 1;
+}
+
+message RegisterNodeResponse {
+  Node node = 1;
 }
 
 message StreamVideoRequest {
   string node_id = 1;
   google.protobuf.Timestamp timestamp = 2;
   bytes image = 3;
-  bool split = 4;
 }
 
 message StreamVideoResponse {
-  bool split = 1;
 }
 
 service SecurityService {
-  rpc GetNode(GetNodeRequest) returns (Node) {}
+  rpc RegisterNode(RegisterNodeRequest) returns (RegisterNodeResponse) {}
   rpc StreamVideo(stream StreamVideoRequest) returns (stream StreamVideoResponse) {}
 }

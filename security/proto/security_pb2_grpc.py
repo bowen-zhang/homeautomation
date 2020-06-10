@@ -14,10 +14,10 @@ class SecurityServiceStub(object):
     Args:
       channel: A grpc.Channel.
     """
-    self.GetNode = channel.unary_unary(
-        '/ha.security.SecurityService/GetNode',
-        request_serializer=security__pb2.GetNodeRequest.SerializeToString,
-        response_deserializer=security__pb2.Node.FromString,
+    self.RegisterNode = channel.unary_unary(
+        '/ha.security.SecurityService/RegisterNode',
+        request_serializer=security__pb2.RegisterNodeRequest.SerializeToString,
+        response_deserializer=security__pb2.RegisterNodeResponse.FromString,
         )
     self.StreamVideo = channel.stream_stream(
         '/ha.security.SecurityService/StreamVideo',
@@ -30,7 +30,7 @@ class SecurityServiceServicer(object):
   # missing associated documentation comment in .proto file
   pass
 
-  def GetNode(self, request, context):
+  def RegisterNode(self, request, context):
     # missing associated documentation comment in .proto file
     pass
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -47,10 +47,10 @@ class SecurityServiceServicer(object):
 
 def add_SecurityServiceServicer_to_server(servicer, server):
   rpc_method_handlers = {
-      'GetNode': grpc.unary_unary_rpc_method_handler(
-          servicer.GetNode,
-          request_deserializer=security__pb2.GetNodeRequest.FromString,
-          response_serializer=security__pb2.Node.SerializeToString,
+      'RegisterNode': grpc.unary_unary_rpc_method_handler(
+          servicer.RegisterNode,
+          request_deserializer=security__pb2.RegisterNodeRequest.FromString,
+          response_serializer=security__pb2.RegisterNodeResponse.SerializeToString,
       ),
       'StreamVideo': grpc.stream_stream_rpc_method_handler(
           servicer.StreamVideo,
