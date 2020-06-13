@@ -14,6 +14,10 @@ webserver {
   host: "server"
   port: 6251
 }
+server {
+  video_archive_location: "/data/security/video"
+  max_record_duration_sec: 900
+}
 nodes {
   id: "b827eb40e5c0"
   name: "Front Door"

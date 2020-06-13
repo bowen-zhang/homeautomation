@@ -1,7 +1,20 @@
+from security.libs import storage_lib
 from security.proto import security_pb2
 from security.proto import security_pb2_grpc
 from shared import context_lib
 from third_party.common import net
+
+
+class ServerContext(context_lib.Context):
+  def __init__(self, config, web, *args, **kwargs):
+    storage=storage_lib.MongoStorage(server=config.mongodb.host,
+                                     port=config.mongodb.port)
+    super().__init__(config=config, storage=storage, *args, **kwargs)
+    self._web = web
+
+  @property
+  def web(self):
+    return self._web
 
 
 class NodeContext(context_lib.Context):
