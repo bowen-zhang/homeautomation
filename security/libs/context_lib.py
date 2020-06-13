@@ -8,8 +8,8 @@ class NodeContext(context_lib.Context):
   def __init__(self, config):
     super().__init__(config=config)
     self._id = None
+    self._name = None
     self._security_service = None
-    self._node_proto = None
 
   @property
   def id(self):
@@ -19,9 +19,16 @@ class NodeContext(context_lib.Context):
     return self._id
 
   @property
+  def name(self):
+    return self._name
+
+  @property
   def security_service(self):
     if not self._security_service:
       self._security_service = self.create_grpc_service_stub(
           security_pb2_grpc.SecurityServiceStub,
           self.config.security_service)
     return self._security_service
+
+  def set_name(self, name):
+    self._name = name

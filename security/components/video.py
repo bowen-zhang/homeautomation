@@ -77,6 +77,9 @@ class VideoCapturer(pattern.Worker):
   def _on_start(self):
     self._camera = picamera.PiCamera(framerate=self._config.framerate,
                                      resolution=(self._config.width, self._config.height))
+    self._camera.annotate_text_size = 20
+    self._camera.annotate_background = picamera.color.Color('#000000')
+    threading.Thread(target=self._update_annotation, daemon=True).start()
 
   def _on_run(self):
     self.logger.info('Starting streaming...')
@@ -91,8 +94,23 @@ class VideoCapturer(pattern.Worker):
       self._proxy.close()
       self.logger.info('Streaming stopped.')
 
+  def _update_annotation(self):
+    while True:
+      now = self._context.clock.now()
+      self._camera.annotate_text = '{0} - {1: %b %d, %Y - %H:%M:%S}'.format(
+          self._context.name, now)
+      time.sleep(1)
+
   def _stream_frames(self):
-    yield security_pb2.StreamVideoRequest(node_id=self._context.id)
+    yield security_pb2.StreamVideoRequest(
+        node_id=self._context.id,
+        spec=security_pb2.VideoSpec(
+            width=self._config.width,
+            height=self._config.height,
+            framerate=self._config.framerate
+        )
+    )
+
     if not self._ready.wait(timeout=5):
       raise StreamingException(
           "Timed out while waiting for server to respond to initial streaming request.")

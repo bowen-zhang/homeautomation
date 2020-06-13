@@ -50,9 +50,11 @@ class NodeApp(app.App):
         response = self._context.security_service.RegisterNode(request)
         self._node_proto = response.node
         self.logger.info('Received node configuration.')
-        return
+        break
       except grpc.RpcError:
         time.sleep(5)
+
+    self._context.set_name(self._node_proto.name)
 
 
 if __name__ == '__main__':

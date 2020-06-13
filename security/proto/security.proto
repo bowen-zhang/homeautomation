@@ -36,7 +36,18 @@ message Node {
   repeated Component components = 3;
 }
 
+message VideoSpec {
+  int32 width = 1;
+  int32 height = 2;
+  int32 framerate = 3;
+}
+
 // Configuration
+
+message ServerConfig {
+  string video_archive_location = 1;
+  int32 max_record_duration_sec = 2;
+}
 
 message Config {
   ha.Endpoint security_service = 1;  
@@ -44,7 +55,8 @@ message Config {
   ha.Endpoint mongodb = 3;
   ha.Endpoint webserver = 4;
 
-  repeated Node nodes = 5;
+  ServerConfig server = 5;
+  repeated Node nodes = 6;
 }
 
 // gRPC Service
@@ -61,6 +73,8 @@ message StreamVideoRequest {
   string node_id = 1;
   google.protobuf.Timestamp timestamp = 2;
   bytes image = 3;
+
+  VideoSpec spec = 4;
 }
 
 message StreamVideoResponse {
